@@ -34,15 +34,19 @@ def home():
     print("expenses: ", expenses)
     
     # Calculate totals and percentages
+    print("sum(expense.amount for expense in expenses): ", sum(expense.amount for expense in expenses))
     total = sum(expense.amount for expense in expenses)
     category_totals = {}
     for expense in expenses:
+        print(f"expenses: ", expense)
+        print(f"expense.category: ", expense.category)
+        print("expense.category not in category_totals", expense.category not in category_totals)
         if expense.category not in category_totals:
             category_totals[expense.category] = 0
         category_totals[expense.category] += expense.amount
 
-    category_percentages = {category: (amount / total) * 100 for category, amount in category_totals.items()}
+    category_percentages = {category: round((amount / total) * 100, 2) for category, amount in category_totals.items()}
 
     print("category_totals: {category_totals}")
 
-    return render_template('index.html', expenses=expenses, total=total, category_percentages=category_percentages, desired_date=desired_date)
+    return render_template('index.html', expenses=expenses, total=total, category_percentages=category_percentages, desired_date=desired_date, category_totals=category_totals)
