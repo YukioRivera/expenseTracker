@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from datetime import datetime
 from app.models import Expense
 from app import db
+from collections import defaultdict
 
 main = Blueprint('main', __name__)
 
@@ -31,22 +32,36 @@ def home():
 
     # Execute the SQL query
     expenses = Expense.query.filter(db.extract('year', Expense.date_time) == year, db.extract('month', Expense.date_time) == month).all()
-    print("expenses: ", expenses)
+    # print("expenses: ", expenses)
     
     # Calculate totals and percentages
-    print("sum(expense.amount for expense in expenses): ", sum(expense.amount for expense in expenses))
+    # print("sum(expense.amount for expense in expenses): ", sum(expense.amount for expense in expenses))
     total = sum(expense.amount for expense in expenses)
     category_totals = {}
     for expense in expenses:
-        print(f"expenses: ", expense)
-        print(f"expense.category: ", expense.category)
-        print("expense.category not in category_totals", expense.category not in category_totals)
+        # print(f"expenses: ", expense)
+        # print(f"expense.category: ", expense.category)
+        # print("expense.category not in category_totals", expense.category not in category_totals)
         if expense.category not in category_totals:
             category_totals[expense.category] = 0
         category_totals[expense.category] += expense.amount
 
     category_percentages = {category: round((amount / total) * 100, 2) for category, amount in category_totals.items()}
 
-    print("category_totals: {category_totals}")
+    # print("category_totals: {category_totals}")
 
     return render_template('index.html', expenses=expenses, total=total, category_percentages=category_percentages, desired_date=desired_date, category_totals=category_totals)
+
+@main.route('/expense_insights', methods=['GET'])
+def expense_insights():
+    # Fetch all expenses
+    all_expenses = Expense.query.order_by(Expense.date_time).all()
+
+    # Organize expenses by month
+    expenses_by_month = defaultdict(list)
+    for expense in all_expenses:
+        month_year_key = expense.date_time.strftime('%B %Y')  # e.g., "September 2023"
+        expenses_by_month[month_year_key].append(expense)
+    
+    # print("expenses_by_month: ", expenses_by_month)
+    return render_template('expense_insights.html', expenses_by_month=expenses_by_month)

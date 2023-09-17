@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+
+    <!-- Month and Year Display (Not a dropdown since this page is for insights) -->
+    <h2>Expense Insights</h2>
+
+    {% for month, entries in expenses_by_month.items() %}
+        <div class="monthly-container">
+            <h3>{{ month }}</h3> <!-- This will display the month and year, e.g., "September 2023" -->
+
+            <!-- Expenses Table -->
+            <table class="expenses-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                        <tr>
+                            <td>{{ entry.date_time.strftime('%Y-%m-%d') }}</td> <!-- Extracting the date part -->
+                            <td>{{ entry.date_time.strftime('%H:%M:%S') }}</td> <!-- Extracting the time part -->
+                            <td>{{ entry.category }}</td>
+                            <td>{{ entry.amount }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
