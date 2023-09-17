@@ -10,6 +10,9 @@ services:
       - DATABASE_URI=mysql+pymysql://root:password@db/mydatabase
     depends_on:
       - db
+    command: >
+      bash -c "python init_db.py &&
+               flask run --host=0.0.0.0"
 
   db:
     image: mysql:5.7
