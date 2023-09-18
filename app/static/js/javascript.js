@@ -75,3 +75,34 @@ function initExpenseInsights() {
 }
 
 // Add more functions for other pages as needed
+
+function handleRemoveEntry(event) {
+    const row = event.target.closest('.entry-row');
+    const entryId = row.getAttribute('data-entry-id');
+
+    fetch('/remove-entry', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: entryId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            row.remove();  // Remove the entry from the table
+        } else {
+            alert('Error removing entry.');
+        }
+    });
+}
+
+// Toggle visibility of the remove button
+const removeButtonContainer = row.querySelector('.remove-container');
+if (isEditing) {
+    removeButtonContainer.style.display = 'flex'; // Use 'flex' to maintain the centering of the "x"
+    removeButtonContainer.addEventListener('click', handleRemoveEntry);
+} else {
+    removeButtonContainer.style.display = 'none';
+    removeButtonContainer.removeEventListener('click', handleRemoveEntry);
+}
