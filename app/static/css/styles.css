@@ -109,3 +109,30 @@ body {
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
+
+[contenteditable="true"] {
+    background-color: #eef;
+    border: 1px solid #aad;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+
+.entry-row {
+    position: relative; /* This allows the absolute positioning of child elements relative to this row */
+}
+
+.remove-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #f44336; /* Red background */
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 5px;
+    cursor: pointer;
+    display: none; /* Initially hidden */
+    transform: translate(-100%, 0); /* This will move the "x" to the left of the row */
+    border-radius: 0 0 5px 0; /* Rounded bottom-right corner */
+}
