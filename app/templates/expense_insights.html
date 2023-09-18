@@ -8,6 +8,9 @@
 
     {% for month, entries in expenses_by_month.items() %}
         <div class="monthly-container">
+
+            <button class="edit-btn" data-month="{{ month }}">Edit Entries</button>
+            
             <h3>{{ month }}</h3> <!-- This will display the month and year, e.g., "September 2023" -->
 
             <!-- Expenses Table -->
