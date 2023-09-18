@@ -28,12 +28,38 @@ function initExpenseInsights() {
             const row = btn.closest('.entry-row');
             
             // Extract the edited data
+            const entryId = row.getAttribute('data-entry-id'); // Extract the entry ID
             const date = row.querySelector('.entry-date').textContent;
             const time = row.querySelector('.entry-time').textContent;
             const category = row.querySelector('.entry-category').textContent;
             const amount = row.querySelector('.entry-amount').textContent;
             
-            // TODO: Send the updated data to the backend using AJAX
+            fetch('/update-entry', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    entry_id: entryId,
+                    date: date,
+                    time: time,
+                    category: category,
+                    amount: amount
+                  })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    // alert(data.message);  // Display success message
+                    // return jsonify({"message": "Entry updated successfully!"})
+
+                } else if (data.error) {
+                    // alert(data.error);  // Display error message
+                    // return jsonify({"error": "Failed to update entry."})
+
+                }
+            });            
+              
             
             // Make the fields non-editable again
             row.querySelector('.entry-date').contentEditable = false;
