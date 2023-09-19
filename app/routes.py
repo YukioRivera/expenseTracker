@@ -3,6 +3,8 @@ from datetime import datetime
 from app.models import Expense
 from app import db
 from collections import defaultdict
+from flask import jsonify
+
 
 main = Blueprint('main', __name__)
 
@@ -65,3 +67,47 @@ def expense_insights():
     
     # print("expenses_by_month: ", expenses_by_month)
     return render_template('expense_insights.html', expenses_by_month=expenses_by_month)
+
+@main.route('/update-entry', methods=['POST'])
+def update_entry():
+    data = request.json
+    print("data", data)
+    entry_id = data['id']
+    date = data['date']
+    time = data['time']
+    category = data['category']
+    amount = data['amount']
+    entry = Expense.query.get(entry_id)
+    if entry:
+        entry.date_time = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M:%S")  # Convert string to datetime
+        entry.category = category
+        entry.amount = float(amount)  # Convert string to float
+        db.session.commit()
+        return {"success": True}, 200
+    return {"success": False, "message": "Entry not found"}, 404
+
+@main.route('/remove-entry', methods=['POST'])
+def remove_entry():
+    data = request.get_json()
+    entry_id = data.get('id')
+    
+    entry = Expense.query.get(entry_id)
+    if entry:
+        try:
+            db.session.delete(entry)
+            db.session.commit()
+            return jsonify({'success': True})
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'success': False, 'message': str(e)})
+    else:
+        return jsonify({'success': False, 'message': 'Entry not found'}), 404
+
+
+
+
+
+
+
+
+
