@@ -12,14 +12,10 @@ function initExpenseInsights() {
             const row = btn.closest('.entry-row');
             
             // Make the fields editable
-            row.querySelector('.entry-date').contentEditable = true;
-            row.querySelector('.entry-time').contentEditable = true;
-            row.querySelector('.entry-category').contentEditable = true;
-            row.querySelector('.entry-amount').contentEditable = true;
+            toggleEditableFields(row, true);
             
             // Hide the edit button and show the apply button
-            btn.style.display = 'none';
-            row.querySelector('.apply-entry-btn').style.display = 'block';
+            toggleEditApplyButtons(row, false);
         });
     });
 
@@ -27,54 +23,59 @@ function initExpenseInsights() {
         btn.addEventListener('click', function() {
             const row = btn.closest('.entry-row');
             
-            // Extract the edited data
-            const entryId = row.getAttribute('data-entry-id'); // Extract the entry ID
-            const date = row.querySelector('.entry-date').textContent;
-            const time = row.querySelector('.entry-time').textContent;
-            const category = row.querySelector('.entry-category').textContent;
-            const amount = row.querySelector('.entry-amount').textContent;
-            
-            fetch('/update-entry', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    entry_id: entryId,
-                    date: date,
-                    time: time,
-                    category: category,
-                    amount: amount
-                  })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    // alert(data.message);  // Display success message
-                    // return jsonify({"message": "Entry updated successfully!"})
-
-                } else if (data.error) {
-                    // alert(data.error);  // Display error message
-                    // return jsonify({"error": "Failed to update entry."})
-
-                }
-            });            
-              
+            // Extract the edited data and send to server
+            updateEntry(row);
             
             // Make the fields non-editable again
-            row.querySelector('.entry-date').contentEditable = false;
-            row.querySelector('.entry-time').contentEditable = false;
-            row.querySelector('.entry-category').contentEditable = false;
-            row.querySelector('.entry-amount').contentEditable = false;
+            toggleEditableFields(row, false);
             
             // Hide the apply button and show the edit button
-            btn.style.display = 'none';
-            row.querySelector('.edit-entry-btn').style.display = 'block';
+            toggleEditApplyButtons(row, true);
         });
     });
 }
 
-// Add more functions for other pages as needed
+function toggleEditableFields(row, isEditable) {
+    row.querySelector('.entry-date').contentEditable = isEditable;
+    row.querySelector('.entry-time').contentEditable = isEditable;
+    row.querySelector('.entry-category').contentEditable = isEditable;
+    row.querySelector('.entry-amount').contentEditable = isEditable;
+}
+
+function toggleEditApplyButtons(row, isEditVisible) {
+    row.querySelector('.edit-entry-btn').style.display = isEditVisible ? 'block' : 'none';
+    row.querySelector('.apply-entry-btn').style.display = isEditVisible ? 'none' : 'block';
+}
+
+function updateEntry(row) {
+    const entryId = row.getAttribute('data-entry-id');
+    const date = row.querySelector('.entry-date').textContent;
+    const time = row.querySelector('.entry-time').textContent;
+    const category = row.querySelector('.entry-category').textContent;
+    const amount = row.querySelector('.entry-amount').textContent;
+    
+    fetch('/update-entry', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            entry_id: entryId,
+            date: date,
+            time: time,
+            category: category,
+            amount: amount
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            // Handle success message
+        } else if (data.error) {
+            // Handle error message
+        }
+    });
+}
 
 function handleRemoveEntry(event) {
     const row = event.target.closest('.entry-row');
@@ -97,12 +98,14 @@ function handleRemoveEntry(event) {
     });
 }
 
-// Toggle visibility of the remove button
-const removeButtonContainer = row.querySelector('.remove-container');
-if (isEditing) {
-    removeButtonContainer.style.display = 'flex'; // Use 'flex' to maintain the centering of the "x"
-    removeButtonContainer.addEventListener('click', handleRemoveEntry);
-} else {
-    removeButtonContainer.style.display = 'none';
-    removeButtonContainer.removeEventListener('click', handleRemoveEntry);
+// This function should be called from the appropriate places
+function toggleRemoveButtonVisibility(row, isEditing) {
+    const removeButtonContainer = row.querySelector('.remove-container');
+    if (isEditing) {
+        removeButtonContainer.style.display = 'flex'; // Use 'flex' to maintain the centering of the "x"
+        removeButtonContainer.addEventListener('click', handleRemoveEntry);
+    } else {
+        removeButtonContainer.style.display = 'none';
+        removeButtonContainer.removeEventListener('click', handleRemoveEntry);
+    }
 }
