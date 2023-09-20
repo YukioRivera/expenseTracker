@@ -9,6 +9,11 @@
 </head>
 <body>
 
+<div class="navbar">
+    <a href="{{ url_for('main.home') }}">Home</a>
+    <a href="{{ url_for('main.expense_insights') }}">Expense Insights</a>
+</div>
+
 <div class="container">
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -26,7 +31,6 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/javascript.js') }}"></script>
-
 
 </body>
 </html>

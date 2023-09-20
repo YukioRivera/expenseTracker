@@ -1,3 +1,27 @@
+/* Navbar Styles */
+.navbar {
+    background-color: #007BFF; /* Primary blue color */
+    overflow: hidden;
+    padding: 10px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 10px 15px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.navbar a:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
 /* General Styles */
 body {
     font-family: Arial, sans-serif;
@@ -136,3 +160,4 @@ body {
     transform: translate(-100%, 0); /* This will move the "x" to the left of the row */
     border-radius: 0 0 5px 0; /* Rounded bottom-right corner */
 }
+
