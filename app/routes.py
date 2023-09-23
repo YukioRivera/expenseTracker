@@ -49,7 +49,6 @@ def home():
         category_totals[expense.category] += expense.amount
 
     category_percentages = {category: round((amount / total) * 100, 2) for category, amount in category_totals.items()}
-
     # print("category_totals: {category_totals}")
 
     return render_template('index.html', expenses=expenses, total=total, category_percentages=category_percentages, desired_date=desired_date, category_totals=category_totals)
@@ -103,11 +102,23 @@ def remove_entry():
     else:
         return jsonify({'success': False, 'message': 'Entry not found'}), 404
 
-
-
-
-
-
-
-
-
+@main.route('/update-entries', methods=['POST'])
+def update_entries():
+    entries = request.json.get('entries', [])
+    try:
+        for entry_data in entries:
+            entry_id = entry_data['id']
+            date = entry_data['date']
+            time = entry_data['time']
+            category = entry_data['category']
+            amount = entry_data['amount']
+            entry = Expense.query.get(entry_id)
+            if entry:
+                entry.date_time = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M:%S")  # Convert string to datetime
+                entry.category = category
+                entry.amount = float(amount)  # Convert string to float
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500

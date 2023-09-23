@@ -56,12 +56,6 @@
         rows.forEach(row => {
             row.querySelectorAll('td:not(.delete-entry)').forEach(cell => {
                 cell.setAttribute('contenteditable', isEditing ? "true" : "false");
-                
-                if (isEditing) {
-                    cell.addEventListener('input', handleCellEdit);
-                } else {
-                    cell.removeEventListener('input', handleCellEdit);
-                }
             });
             
             // Show/hide delete button for each row
@@ -75,6 +69,38 @@
         
         // Toggle button text
         button.textContent = isEditing ? 'Apply' : 'Edit Entries';
+    
+        // If not editing, collect all the edited entries and send them to the server
+        if (!isEditing) {
+            const editedEntries = Array.from(rows).map(row => {
+                return {
+                    id: row.getAttribute('data-entry-id'),
+                    date: row.querySelector('.entry-date').textContent,
+                    time: row.querySelector('.entry-time').textContent,
+                    category: row.querySelector('.entry-category').textContent,
+                    amount: row.querySelector('.entry-amount').textContent
+                };
+            });
+            updateEntries(editedEntries);
+        }
+    }
+
+    function updateEntries(entries) {
+        fetch('/update-entries', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ entries })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error updating entries.');
+            }
+        });
     }
     
     function handleCellEdit(event) {
