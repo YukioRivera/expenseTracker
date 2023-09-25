@@ -15,13 +15,14 @@ def load_user(user_id):
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
+    # Check if user is already logged in
+    if current_user.is_authenticated:
+        return redirect(url_for('main.home'))  # Redirect to index.html page
+
     if request.method == 'POST':
         username = request.form['username']
-        print("username ", username)
         password = request.form['password']
-        print("password ", password)
         user = User.query.filter_by(username=username).first()
-        print("user ", user)
         if user and user.password == password:
             login_user(user)
             flash('Login successful!', 'success')
