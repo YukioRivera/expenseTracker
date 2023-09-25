@@ -1,33 +1,44 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from datetime import datetime
-from app.models import Expense
-from app import db
+from app.models import Expense, User
+from app import db, login_manager
 from collections import defaultdict
 from flask import jsonify
-
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import login_user, logout_user, login_required, current_user
 
 main = Blueprint('main', __name__)
 
-@main.route('/submit', methods=['POST'])
-def submit():
-    amount = float(request.form.get('amount'))
-    category = request.form.get('category').lower()
-    date_time = datetime.now()
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
-    # Insert data into the database
-    expense = Expense(amount=amount, category=category, date_time=date_time)
-    # this was added check this if the website doesnt work 
-    try:
-        db.session.add(expense)
-        db.session.commit()
-        flash('Expense added successfully!', 'success')
-    except Exception as e:
-        db.session.rollback()
-        flash(f'Error: {e}', 'danger')
+@main.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        print("username ", username)
+        password = request.form['password']
+        print("password ", password)
+        user = User.query.filter_by(username=username).first()
+        print("user ", user)
+        if user and user.password == password:
+            login_user(user)
+            flash('Login successful!', 'success')
+            return redirect(url_for('main.home'))
+        else:
+            flash('Invalid username or password. Please try again.', 'danger')
+    return render_template('login.html')
 
-    return redirect(url_for('main.home'))
+@main.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Logged out successfully!', 'success')
+    return redirect(url_for('main.login'))
 
 @main.route('/', methods=['GET', 'POST'])
+@login_required
 def home():
     desired_date = request.args.get('date', default=datetime.now().strftime('%Y-%m'))
     year, month = map(int, desired_date.split('-'))
@@ -54,6 +65,7 @@ def home():
     return render_template('index.html', expenses=expenses, total=total, category_percentages=category_percentages, desired_date=desired_date, category_totals=category_totals)
 
 @main.route('/expense_insights', methods=['GET'])
+@login_required
 def expense_insights():
     # Fetch all expenses
     all_expenses = Expense.query.order_by(Expense.date_time).all()
@@ -67,7 +79,28 @@ def expense_insights():
     # print("expenses_by_month: ", expenses_by_month)
     return render_template('expense_insights.html', expenses_by_month=expenses_by_month)
 
+@main.route('/submit', methods=['POST'])
+@login_required
+def submit():
+    amount = float(request.form.get('amount'))
+    category = request.form.get('category').lower()
+    date_time = datetime.now()
+
+    # Insert data into the database
+    expense = Expense(amount=amount, category=category, date_time=date_time)
+    # this was added check this if the website doesnt work 
+    try:
+        db.session.add(expense)
+        db.session.commit()
+        flash('Expense added successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error: {e}', 'danger')
+
+    return redirect(url_for('main.home'))
+
 @main.route('/update-entry', methods=['POST'])
+@login_required
 def update_entry():
     data = request.json
     print("data", data)
@@ -86,6 +119,7 @@ def update_entry():
     return {"success": False, "message": "Entry not found"}, 404
 
 @main.route('/remove-entry', methods=['POST'])
+@login_required
 def remove_entry():
     data = request.get_json()
     entry_id = data.get('id')
@@ -103,6 +137,7 @@ def remove_entry():
         return jsonify({'success': False, 'message': 'Entry not found'}), 404
 
 @main.route('/update-entries', methods=['POST'])
+@login_required
 def update_entries():
     entries = request.json.get('entries', [])
     try:
@@ -122,3 +157,18 @@ def update_entries():
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'message': str(e)}), 500
+
+# @main.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if request.method == 'POST':
+#         username = request.form['username']
+#         password = request.form['password']
+#         user = User.query.filter_by(username=username).first()
+#         if user and check_password_hash(user.password, password):
+#             # Login successful, redirect to index page
+#             return redirect(url_for('main.index'))
+#         else:
+#             # Login failed, show error message
+#             error_message = "Invalid username or password. Please try again."
+#             return render_template('login.html', error_message=error_message)
+#     return render_template('login.html')
