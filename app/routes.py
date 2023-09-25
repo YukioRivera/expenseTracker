@@ -6,6 +6,7 @@ from collections import defaultdict
 from flask import jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
+from app.models import RecurringCharge
 
 main = Blueprint('main', __name__)
 
@@ -173,3 +174,35 @@ def update_entries():
 #             error_message = "Invalid username or password. Please try again."
 #             return render_template('login.html', error_message=error_message)
 #     return render_template('login.html')
+
+@main.route('/add-recurring', methods=['POST'])
+@login_required
+def add_recurring():
+    amount = float(request.form.get('amount'))
+    category = request.form.get('category').lower()
+    start_date = datetime.strptime(request.form.get('start_date'), "%Y-%m-%d").date()
+    end_date_str = request.form.get('end_date')
+    end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date() if end_date_str else None
+    day_of_month = int(request.form.get('day_of_month'))
+    user_id = current_user.id  # Assuming you have Flask-Login setup
+
+    # Create a new RecurringCharge object
+    recurring_charge = RecurringCharge(
+        amount=amount,
+        category=category,
+        start_date=start_date,
+        end_date=end_date,
+        day_of_month=day_of_month,
+        user_id=user_id
+    )
+
+    # Insert data into the database
+    try:
+        db.session.add(recurring_charge)
+        db.session.commit()
+        flash('Recurring charge added successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error: {e}', 'danger')
+
+    return redirect(url_for('main.home'))

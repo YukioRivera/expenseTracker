@@ -53,7 +53,70 @@
             </tr>
         </tfoot>
     </table>
-    
+
+    <!-- Recurring Charges Entry Form -->
+    <form action="/add-recurring" method="post" class="recurring-charges-form">
+        <div class="input-group">
+            <label for="recurring-amount">Amount:</label>
+            <input type="number" name="amount" id="recurring-amount" required>
+        </div>
+        <div class="input-group">
+            <label for="recurring-category">Category:</label>
+            <input type="text" name="category" id="recurring-category" required>
+        </div>
+        <div class="input-group">
+            <label for="start-date">Start Date:</label>
+            <input type="date" name="start_date" id="start-date" required>
+        </div>
+        <div class="input-group">
+            <label for="end-date">End Date (optional):</label>
+            <input type="date" name="end_date" id="end-date">
+        </div>
+        <div class="input-group">
+            <label for="day-of-month">Day of Month:</label>
+            <input type="number" name="day_of_month" id="day-of-month" min="1" max="31" required>
+        </div>
+        <div class="input-group">
+            <button type="submit">Add Recurring Charge</button>
+        </div>
+    </form>
+
+    <!-- Recurring Charges Table -->
+    <table class="recurring-charges-table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Day of Month</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if recurring_charges %}
+                {% for charge in recurring_charges %}
+                <tr>
+                    <td>{{ charge.category }}</td>
+                    <td>{{ charge.amount }}</td>
+                    <td>{{ charge.start_date }}</td>
+                    <td>{{ charge.end_date or 'N/A' }}</td>
+                    <td>{{ charge.day_of_month }}</td>
+                    <td>
+                        <!-- Edit and Delete buttons (you'll need to implement the routes and logic for these) -->
+                        <a href="{{ url_for('main.edit_recurring_charge', id=charge.id) }}">Edit</a>
+                        <a href="{{ url_for('main.delete_recurring_charge', id=charge.id) }}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="6">No recurring charges found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
     <br>
     <!-- Button that will link to new page, expense insights -->
     <a href="{{ url_for('main.expense_insights') }}" class="btn-expense-insights">Expense Insights</a>

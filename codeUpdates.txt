@@ -1,0 +1,2 @@
+Make password hash 
+add a function that allows for routine spending     
