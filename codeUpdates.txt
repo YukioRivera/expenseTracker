@@ -1,2 +1,7 @@
 Make password hash 
 add a function that allows for routine spending     
+log out function 
+login function? 
+create user? 
+    master user that is able to create users? - pass protected? 
+in the table in index.html the categories should collapse and units add up when showing table 

@@ -63,8 +63,20 @@ def home():
 
     category_percentages = {category: round((amount / total) * 100, 2) for category, amount in category_totals.items()}
     # print("category_totals: {category_totals}")
+    
+    # Get the list of unique categories that have recurring charges
+    recurring_categories = db.session.query(RecurringCharge.category).distinct().all()
+    recurring_category_names = [category[0] for category in recurring_categories]
 
-    return render_template('index.html', expenses=expenses, total=total, category_percentages=category_percentages, desired_date=desired_date, category_totals=category_totals)
+    return render_template(
+        'index.html',
+        expenses=expenses,
+        total=total,
+        category_percentages=category_percentages,
+        desired_date=desired_date,
+        category_totals=category_totals,  # Ensure there's a comma here
+        recurring_category_names=recurring_category_names  # pass the data to the template
+    )
 
 @main.route('/expense_insights', methods=['GET'])
 @login_required

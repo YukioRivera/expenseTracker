@@ -29,6 +29,7 @@
                 <th>Category</th>
                 <th>Total Amount</th>
                 <th>Percentage of Total</th>
+                <th>Actions</th>  <!-- Add an Actions column header -->
             </tr>
         </thead>
         <tbody>         
@@ -38,11 +39,17 @@
                     <td>{{ category }}</td>
                     <td>{{ total_amount }}</td>
                     <td>{{ category_percentages[category] }}%</td>
+                    <td>
+                        <!-- Add an Edit link for recurring charges -->
+                        {% if category in recurring_category_names %}
+                            <a href="{{ url_for('main.edit_recurring_charge', category=category) }}">Edit</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="3">No data available for this month.</td>
+                    <td colspan="4">No data available for this month.</td>
                 </tr>
             {% endif %}
         </tbody>
