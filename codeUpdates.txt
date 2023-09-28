@@ -6,3 +6,4 @@ create user?
     master user that is able to create users? - pass protected? 
 in the table in index.html the categories should collapse and units add up when showing table 
 ml?
+neeed to also add https? 
