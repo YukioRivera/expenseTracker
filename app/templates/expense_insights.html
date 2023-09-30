@@ -8,10 +8,11 @@
     <div class="monthly-container">
         <h2>{{ month }}</h2>
 
+        <button class="edit-btn" data-month="{{ month }}" onclick="toggleEdit(this)">Edit Entries</button>
+
         <!-- Expenses Table -->
         {% if expenses_by_month[month] %}
         <h3>Expenses</h3>
-        <button class="edit-btn" data-month="{{ month }}" onclick="toggleEdit(this)">Edit Entries</button>
         <table class="expenses-table">
             <thead>
                 <tr>
