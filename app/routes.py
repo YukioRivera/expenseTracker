@@ -66,15 +66,30 @@ def home():
             'type': 'Recurring Charge'
         })
 
-    # Step 2: Calculate Percentages
-    grand_total = sum(item['amount'] for item in unified_data)
+    # Step 2: Aggregate Data by Category
+    aggregated_data = {}
     for item in unified_data:
+        category = item['category']
+        if category not in aggregated_data:
+            aggregated_data[category] = {
+                'category': category,
+                'amount': 0,
+                'type': item['type']
+            }
+        aggregated_data[category]['amount'] += item['amount']
+
+    # Convert aggregated data to list
+    aggregated_data_list = list(aggregated_data.values())
+
+    # Step 3: Calculate Percentages
+    grand_total = sum(item['amount'] for item in aggregated_data_list)
+    for item in aggregated_data_list:
         item['percentage_of_total'] = round((item['amount'] / grand_total) * 100, 2)
 
-    # Step 3: Sort the Data
-    sorted_data = sorted(unified_data, key=lambda x: x['category'])
+    # Step 4: Sort the Data
+    sorted_data = sorted(aggregated_data_list, key=lambda x: x['category'])
 
-    # Step 4: Pass the Data to the Template
+    # Step 5: Pass the Data to the Template
     return render_template(
         'index.html',
         data=sorted_data,
