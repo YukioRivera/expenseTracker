@@ -87,15 +87,32 @@ def home():
 def expense_insights():
     # Fetch all expenses
     all_expenses = Expense.query.order_by(Expense.date_time).all()
+    
+    # Query the RecurringCharge table
+    recurring_charges = RecurringCharge.query.filter_by(user_id=current_user.id).all()
 
     # Organize expenses by month
     expenses_by_month = defaultdict(list)
     for expense in all_expenses:
         month_year_key = expense.date_time.strftime('%B %Y')  # e.g., "September 2023"
         expenses_by_month[month_year_key].append(expense)
+        
+    # organize recurring expenses by month 
+    recurring_expenses_by_month = defaultdict(list)
+    for recurringCharge in recurring_charges:
+        month_year_key = recurringCharge.start_date.strftime('%B %Y')  # e.g., "September 2023"
+        recurring_expenses_by_month[month_year_key].append(recurringCharge)
     
-    # print("expenses_by_month: ", expenses_by_month)
-    return render_template('expense_insights.html', expenses_by_month=expenses_by_month)
+    # Get all unique months from both expenses and recurring expenses
+    all_months = set(expenses_by_month.keys()) | set(recurring_expenses_by_month.keys())
+    all_months = sorted(list(all_months))  # Sort the months
+
+    return render_template(
+        'expense_insights.html', 
+        expenses_by_month=expenses_by_month,
+        recurring_expenses_by_month=recurring_expenses_by_month,
+        all_months=all_months  # Pass the sorted list of all months to the template
+    )
 
 @main.route('/submit', methods=['POST'])
 @login_required

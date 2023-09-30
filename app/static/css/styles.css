@@ -154,3 +154,30 @@ body {
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
+
+/* Expenses and Recurring Expenses Table Styles */
+.expenses-table, .recurring-expenses-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.expenses-table thead, .recurring-expenses-table thead {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.expenses-table th, .expenses-table td,
+.recurring-expenses-table th, .recurring-expenses-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.expenses-table tbody tr:nth-child(even),
+.recurring-expenses-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.expenses-table tfoot, .recurring-expenses-table tfoot {
+    font-weight: bold;
+}

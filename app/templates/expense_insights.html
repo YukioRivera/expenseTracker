@@ -2,21 +2,16 @@
 
 {% block content %}
 <div class="container">
-
-    <!-- Month and Year Display (Not a dropdown since this page is for insights) -->
     <h2>Expense Insights</h2>
 
-    {% for month, entries in expenses_by_month.items() %}
+    {% for month in all_months %}
     <div class="monthly-container">
-        <h3>{{ month }}</h3>
-        <button class="edit-btn" data-month="{{ month }}" onclick="toggleEdit(this)">Edit Entries</button>
-        
-        <!-- Placeholder for the delete button -->
-        <div class="delete-container" style="display: none;">
-            <button onclick="handleRemoveEntry(event)">Delete</button>
-        </div>
+        <h2>{{ month }}</h2>
 
         <!-- Expenses Table -->
+        {% if expenses_by_month[month] %}
+        <h3>Expenses</h3>
+        <button class="edit-btn" data-month="{{ month }}" onclick="toggleEdit(this)">Edit Entries</button>
         <table class="expenses-table">
             <thead>
                 <tr>
@@ -28,7 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for entry in entries %}
+                {% for entry in expenses_by_month[month] %}
                     <tr class="entry-row" data-entry-id="{{ entry.id }}">
                         <td class="entry-date" contenteditable="false">{{ entry.date_time.strftime('%Y-%m-%d') }}</td>
                         <td class="entry-time" contenteditable="false">{{ entry.date_time.strftime('%H:%M:%S') }}</td>
@@ -41,13 +36,42 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% endif %}
 
+        <!-- Recurring Expenses Table -->
+        {% if recurring_expenses_by_month[month] %}
+        <h3>Recurring Expenses</h3>
+        <table class="expenses-table"> <!-- Changed class name here -->
+            <thead>
+                <tr>
+                    <th>Start Date</th>
+                    <th>End Date</th>  <!-- Changed header from Time to End Date -->
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th></th> <!-- Placeholder for delete button header -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in recurring_expenses_by_month[month] %}
+                    <tr class="entry-row" data-entry-id="{{ entry.id }}">
+                        <td class="entry-date" contenteditable="false">{{ entry.start_date.strftime('%Y-%m-%d') }}</td>
+                        <td class="entry-end-date" contenteditable="false">{{ entry.end_date.strftime('%Y-%m-%d') if entry.end_date else 'N/A' }}</td>  <!-- Changed this line -->
+                        <td class="entry-category" contenteditable="false">{{ entry.category }}</td>
+                        <td class="entry-amount" contenteditable="false">{{ entry.amount }}</td>
+                        <td class="delete-entry" style="display: none;">
+                            <button onclick="handleRemoveEntry(event)">Delete</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
 
 <script>
-    function toggleEdit(button) {
+    function toggleEdit(button, type) {
         const container = button.parentElement;
         const rows = container.querySelectorAll('.entry-row');
         const isEditing = button.textContent === 'Edit Entries';
@@ -78,7 +102,8 @@
                     date: row.querySelector('.entry-date').textContent,
                     time: row.querySelector('.entry-time').textContent,
                     category: row.querySelector('.entry-category').textContent,
-                    amount: row.querySelector('.entry-amount').textContent
+                    amount: row.querySelector('.entry-amount').textContent,
+                    type: type  // 'expenses' or 'recurring'
                 };
             });
             updateEntries(editedEntries);
@@ -103,36 +128,7 @@
         });
     }
     
-    function handleCellEdit(event) {
-        const cell = event.target;
-        const row = cell.closest('.entry-row');
-        const entry = {
-            id: row.getAttribute('data-entry-id'),
-            date: row.querySelector('.entry-date').textContent,
-            time: row.querySelector('.entry-time').textContent,
-            category: row.querySelector('.entry-category').textContent,
-            amount: row.querySelector('.entry-amount').textContent
-        };
-    
-        // Send the edited entry to the server
-        fetch('/update-entry', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(entry)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Error updating entry.');
-            }
-        });
-    }
-
-    function handleRemoveEntry(event) {
+    function handleRemoveEntry(event, type) {
         const button = event.target;
         const row = button.closest('.entry-row');
         const entryId = row.getAttribute('data-entry-id');
@@ -142,7 +138,7 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ id: entryId })
+            body: JSON.stringify({ id: entryId, type: type })  // 'expenses' or 'recurring'
         })
         .then(response => {
             if (!response.ok) {
