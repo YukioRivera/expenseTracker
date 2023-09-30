@@ -69,6 +69,9 @@ def home():
     print("recurring_categories: ", recurring_categories)
     recurring_category_names = [category[0] for category in recurring_categories]
     print("recurring_category_names: ", recurring_category_names)
+    
+    # Query the RecurringCharge table
+    recurring_charges = RecurringCharge.query.filter_by(user_id=current_user.id).all()
 
     return render_template(
         'index.html',
@@ -76,8 +79,9 @@ def home():
         total=total,
         category_percentages=category_percentages,
         desired_date=desired_date,
-        category_totals=category_totals,  # Ensure there's a comma here
-        recurring_category_names=recurring_category_names  # pass the data to the template
+        category_totals=category_totals,
+        recurring_category_names=recurring_category_names,
+        recurring_charges=recurring_charges  # pass the data to the template
     )
 
 @main.route('/expense_insights', methods=['GET'])
