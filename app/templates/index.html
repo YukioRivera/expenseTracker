@@ -22,22 +22,24 @@
         </div>
     </form>
 
-    <!-- Expenses Table -->
+    <!-- Unified Expenses and Recurring Charges Table -->
     <table class="expenses-table">
         <thead>
             <tr>
+                <th>Type</th>
                 <th>Category</th>
-                <th>Total Amount</th>
+                <th>Amount</th>
                 <th>Percentage of Total</th>
             </tr>
         </thead>
-        <tbody>         
-            {% if category_totals %}
-                {% for category, total_amount in category_totals.items() %}
+        <tbody>
+            {% if data %}
+                {% for item in data %}
                 <tr>
-                    <td>{{ category }}</td>
-                    <td>{{ total_amount }}</td>
-                    <td>{{ category_percentages[category] }}%</td>
+                    <td>{{ item.type }}</td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.amount }}</td>
+                    <td>{{ item.percentage_of_total }}%</td>
                 </tr>
                 {% endfor %}
             {% else %}
@@ -48,43 +50,10 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2">Total for the Month:</td>
-                <td>{{ total }}</td>
+                <td colspan="3">Total for the Month:</td>
+                <td>{{ grand_total }}</td>
             </tr>
         </tfoot>
-    </table>
-
-    <br>
-    <br>
-
-    <!-- Recurring Charges Table -->
-    <table class="expenses-table">
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Day of Month</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if recurring_charges %}
-                {% for charge in recurring_charges %}
-                <tr>
-                    <td>{{ charge.category }}</td>
-                    <td>{{ charge.amount }}</td>
-                    <td>{{ charge.start_date }}</td>
-                    <td>{{ charge.end_date or 'N/A' }}</td>
-                    <td>{{ charge.day_of_month }}</td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="5">No recurring charges found.</td>
-                </tr>
-            {% endif %}
-        </tbody>
     </table>
 
     <!-- Recurring Charges Entry Form -->

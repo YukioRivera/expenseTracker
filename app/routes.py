@@ -45,43 +45,41 @@ def home():
     desired_date = request.args.get('date', default=datetime.now().strftime('%Y-%m'))
     year, month = map(int, desired_date.split('-'))
 
-    # Execute the SQL query
+    # Execute the SQL query for Expenses
     expenses = Expense.query.filter(db.extract('year', Expense.date_time) == year, db.extract('month', Expense.date_time) == month).all()
-    # print("expenses: ", expenses)
-    
-    # Calculate totals and percentages
-    # print("sum(expense.amount for expense in expenses): ", sum(expense.amount for expense in expenses))
-    total = sum(expense.amount for expense in expenses)
-    category_totals = {}
-    for expense in expenses:
-        # print(f"expenses: ", expense)
-        # print(f"expense.category: ", expense.category)
-        # print("expense.category not in category_totals", expense.category not in category_totals)
-        if expense.category not in category_totals:
-            category_totals[expense.category] = 0
-        category_totals[expense.category] += expense.amount
-
-    category_percentages = {category: round((amount / total) * 100, 2) for category, amount in category_totals.items()}
-    # print("category_totals: {category_totals}")
-    
-    # Get the list of unique categories that have recurring charges
-    recurring_categories = db.session.query(RecurringCharge.category).distinct().all()
-    print("recurring_categories: ", recurring_categories)
-    recurring_category_names = [category[0] for category in recurring_categories]
-    print("recurring_category_names: ", recurring_category_names)
     
     # Query the RecurringCharge table
     recurring_charges = RecurringCharge.query.filter_by(user_id=current_user.id).all()
 
+    # Step 1: Create a Unified Data Structure
+    unified_data = []
+    for expense in expenses:
+        unified_data.append({
+            'category': expense.category,
+            'amount': expense.amount,
+            'type': 'Expense'
+        })
+    for recurring_charge in recurring_charges:
+        unified_data.append({
+            'category': recurring_charge.category,
+            'amount': recurring_charge.amount,
+            'type': 'Recurring Charge'
+        })
+
+    # Step 2: Calculate Percentages
+    grand_total = sum(item['amount'] for item in unified_data)
+    for item in unified_data:
+        item['percentage_of_total'] = round((item['amount'] / grand_total) * 100, 2)
+
+    # Step 3: Sort the Data
+    sorted_data = sorted(unified_data, key=lambda x: x['category'])
+
+    # Step 4: Pass the Data to the Template
     return render_template(
         'index.html',
-        expenses=expenses,
-        total=total,
-        category_percentages=category_percentages,
-        desired_date=desired_date,
-        category_totals=category_totals,
-        recurring_category_names=recurring_category_names,
-        recurring_charges=recurring_charges  # pass the data to the template
+        data=sorted_data,
+        grand_total=grand_total,
+        desired_date=desired_date
     )
 
 @main.route('/expense_insights', methods=['GET'])
