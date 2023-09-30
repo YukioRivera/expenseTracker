@@ -1,89 +1,105 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <!-- Month and Year Dropdown -->
-    <form action="/" method="get" class="month-dropdown">
-        <label for="date">Select Month and Year:</label>
-        <input type="month" name="date" id="date" value="{{ desired_date }}" onchange="this.form.submit()">
-    </form>
+    <div class="container">
+        <!-- Month and Year Dropdown -->
+        <section class="month-selection">
+            <form action="/" method="get" class="month-dropdown">
+                <label for="date">Select Month and Year:</label>
+                <input type="month" name="date" id="date" value="{{ desired_date }}" onchange="this.form.submit()">
+            </form>
+        </section>
 
-    <!-- Data Entry Form -->
-    <form action="/submit" method="post" class="data-entry-form">
-        <div class="input-group">
-            <label for="amount">Amount:</label>
-            <input type="number" name="amount" id="amount" required>
-        </div>
-        <div class="input-group">
-            <label for="category">Category:</label>
-            <input type="text" name="category" id="category" required>
-        </div>
-        <div class="input-group">
-            <button type="submit">Add Expense</button>
-        </div>
-    </form>
+        <!-- Entry Forms -->
+        <section class="entry-forms">
+            <div class="form-wrapper">
+                <!-- Data Entry Form -->
+                <form action="/submit" method="post" class="data-entry-form">
+                    <h2>Add Expense</h2>
+                    <div class="input-group">
+                        <label for="amount">Amount:</label>
+                        <input type="number" name="amount" id="amount" required placeholder="Enter amount">
+                    </div>
+                    <div class="input-group">
+                        <label for="category">Category:</label>
+                        <input type="text" name="category" id="category" required placeholder="Enter category">
+                    </div>
+                    <div class="input-group">
+                        <button type="submit" class="btn-expense-insights">Add Expense</button>
+                    </div>
+                </form>
+            </div>
 
-    <!-- Unified Expenses and Recurring Charges Table -->
-    <table class="expenses-table">
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Percentage of Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if data %}
-                {% for item in data %}
-                <tr>
-                    <td>{{ item.type }}</td>
-                    <td>{{ item.category }}</td>
-                    <td>{{ item.amount }}</td>
-                    <td>{{ item.percentage_of_total }}%</td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="4">No data available for this month.</td>
-                </tr>
-            {% endif %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3">Total for the Month:</td>
-                <td>{{ grand_total }}</td>
-            </tr>
-        </tfoot>
-    </table>
+            <div class="form-wrapper">
+                <!-- Recurring Charges Entry Form -->
+                <form action="/add-recurring" method="post" class="data-entry-form">
+                    <h2>Add Recurring Charge</h2>
+                    <div class="input-group">
+                        <label for="recurring-amount">Amount:</label>
+                        <input type="number" name="amount" id="recurring-amount" required placeholder="Enter amount">
+                    </div>
+                    <div class="input-group">
+                        <label for="recurring-category">Category:</label>
+                        <input type="text" name="category" id="recurring-category" required placeholder="Enter category">
+                    </div>
+                    <div class="input-group">
+                        <label for="start-date">Start Date:</label>
+                        <input type="date" name="start_date" id="start-date" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="end-date">End Date (optional):</label>
+                        <input type="date" name="end_date" id="end-date">
+                    </div>
+                    <div class="input-group">
+                        <label for="day-of-month">Day of Month:</label>
+                        <input type="number" name="day_of_month" id="day-of-month" min="1" max="31" required>
+                    </div>
+                    <div class="input-group">
+                        <button type="submit" class="btn-expense-insights">Add Recurring Charge</button>
+                    </div>
+                </form>
+            </div>
+        </section>
 
-    <!-- Recurring Charges Entry Form -->
-    <form action="/add-recurring" method="post" class="recurring-charges-form">
-        <div class="input-group">
-            <label for="recurring-amount">Amount:</label>
-            <input type="number" name="amount" id="recurring-amount" required>
-        </div>
-        <div class="input-group">
-            <label for="recurring-category">Category:</label>
-            <input type="text" name="category" id="recurring-category" required>
-        </div>
-        <div class="input-group">
-            <label for="start-date">Start Date:</label>
-            <input type="date" name="start_date" id="start-date" required>
-        </div>
-        <div class="input-group">
-            <label for="end-date">End Date (optional):</label>
-            <input type="date" name="end_date" id="end-date">
-        </div>
-        <div class="input-group">
-            <label for="day-of-month">Day of Month:</label>
-            <input type="number" name="day_of_month" id="day-of-month" min="1" max="31" required>
-        </div>
-        <div class="input-group">
-            <button type="submit">Add Recurring Charge</button>
-        </div>
-    </form>
+        <!-- Unified Expenses and Recurring Charges Table -->
+        <section class="expenses-summary">
+            <table class="expenses-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Percentage of Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if data %}
+                        {% for item in data %}
+                        <tr>
+                            <td>{{ item.type }}</td>
+                            <td>{{ item.category }}</td>
+                            <td>{{ item.amount }}</td>
+                            <td>{{ item.percentage_of_total }}%</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4">No data available for this month.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Total for the Month:</td>
+                        <td>{{ grand_total }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
 
-    <br>
-    <!-- Button that will link to new page, expense insights -->
-    <a href="{{ url_for('main.expense_insights') }}" class="btn-expense-insights">Expense Insights</a>
+        <!-- Expense Insights Link -->
+        <section class="expense-insights-link">
+            <a href="{{ url_for('main.expense_insights') }}" class="btn-expense-insights">Expense Insights</a>
+        </section>
+    </div>
 {% endblock %}

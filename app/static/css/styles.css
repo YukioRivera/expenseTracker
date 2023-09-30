@@ -21,7 +21,6 @@
     background-color: #0056b3; /* Darker blue on hover */
 }
 
-
 /* General Styles */
 body {
     font-family: Arial, sans-serif;
@@ -52,29 +51,51 @@ body {
     margin-left: 10px;
 }
 
-/* Data Entry Form Styles */
-.data-entry-form {
-    margin-bottom: 20px;
+/* Form Wrapper Styles */
+.form-wrapper {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px; /* Adds space between forms */
+    background-color: #fff; /* White background */
+}
+
+/* Unified Form Styles */
+.data-entry-form .input-group,
+.recurring-charges-form .input-group {
+    margin-bottom: 15px; /* Adds space between form fields */
 }
 
 .data-entry-form input,
-.data-entry-form select {
+.data-entry-form select,
+.recurring-charges-form input,
+.recurring-charges-form select {
     padding: 5px;
     margin: 5px 0;
     width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-.data-entry-form button {
-    padding: 10px 15px;
-    background-color: #007BFF;
-    color: #fff;
+.data-entry-form button,
+.recurring-charges-form button {
+    background-color: #007BFF; /* Primary blue color */
     border: none;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
     cursor: pointer;
-    margin-top: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
-.data-entry-form button:hover {
-    background-color: #0056b3;
+.data-entry-form button:hover,
+.recurring-charges-form button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }
 
 /* Expenses Table Styles */
@@ -133,31 +154,3 @@ body {
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
-
-[contenteditable="true"] {
-    background-color: #eef;
-    border: 1px solid #aad;
-    padding: 5px;
-    border-radius: 4px;
-}
-
-
-.entry-row {
-    position: relative; /* This allows the absolute positioning of child elements relative to this row */
-}
-
-.remove-btn {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #f44336; /* Red background */
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 2px 5px;
-    cursor: pointer;
-    display: none; /* Initially hidden */
-    transform: translate(-100%, 0); /* This will move the "x" to the left of the row */
-    border-radius: 0 0 5px 0; /* Rounded bottom-right corner */
-}
-
