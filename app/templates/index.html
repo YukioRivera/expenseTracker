@@ -29,7 +29,6 @@
                 <th>Category</th>
                 <th>Total Amount</th>
                 <th>Percentage of Total</th>
-                <th>Actions</th>  <!-- Add an Actions column header -->
             </tr>
         </thead>
         <tbody>         
@@ -39,12 +38,6 @@
                     <td>{{ category }}</td>
                     <td>{{ total_amount }}</td>
                     <td>{{ category_percentages[category] }}%</td>
-                    <td>
-                        <!-- Add an Edit link for recurring charges -->
-                        {% if category in recurring_category_names %}
-                            <a href="{{ url_for('main.edit_recurring_charge', category=category) }}">Edit</a>
-                        {% endif %}
-                    </td>
                 </tr>
                 {% endfor %}
             {% else %}
@@ -97,7 +90,6 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Day of Month</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -109,16 +101,11 @@
                     <td>{{ charge.start_date }}</td>
                     <td>{{ charge.end_date or 'N/A' }}</td>
                     <td>{{ charge.day_of_month }}</td>
-                    <td>
-                        <!-- Edit and Delete buttons (you'll need to implement the routes and logic for these) -->
-                        <a href="{{ url_for('main.edit_recurring_charge', id=charge.id) }}">Edit</a>
-                        <a href="{{ url_for('main.delete_recurring_charge', id=charge.id) }}">Delete</a>
-                    </td>
                 </tr>
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="6">No recurring charges found.</td>
+                    <td colspan="5">No recurring charges found.</td>
                 </tr>
             {% endif %}
         </tbody>

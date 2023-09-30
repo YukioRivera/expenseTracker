@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from datetime import datetime
-from app.models import Expense, User
+from app.models import Expense, User, RecurringCharge
 from app import db, login_manager
 from collections import defaultdict
 from flask import jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from app.models import RecurringCharge
+
 
 main = Blueprint('main', __name__)
 
@@ -66,7 +66,9 @@ def home():
     
     # Get the list of unique categories that have recurring charges
     recurring_categories = db.session.query(RecurringCharge.category).distinct().all()
+    print("recurring_categories: ", recurring_categories)
     recurring_category_names = [category[0] for category in recurring_categories]
+    print("recurring_category_names: ", recurring_category_names)
 
     return render_template(
         'index.html',
