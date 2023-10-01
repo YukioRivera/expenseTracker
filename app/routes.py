@@ -55,7 +55,7 @@ def home():
     unified_data = []
     for expense in expenses:
         unified_data.append({
-            'category': expense.category,
+            'category': expense.category.strip(),
             'amount': expense.amount,
             'type': 'Expense'
         })
@@ -75,7 +75,7 @@ def home():
             # Ensure the date is within the start and end dates of the recurring charge
             if recurring_charge.start_date <= recurring_date and (recurring_charge.end_date is None or recurring_charge.end_date >= recurring_date):
                 unified_data.append({
-                    'category': recurring_charge.category,
+                    'category': recurring_charge.category.strip(),
                     'amount': recurring_charge.amount,
                     'type': 'Recurring Charge'
                 })
