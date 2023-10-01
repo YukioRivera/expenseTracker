@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from datetime import datetime
+from datetime import datetime, timedelta
 from app.models import Expense, User, RecurringCharge
 from app import db, login_manager
 from collections import defaultdict
@@ -59,43 +59,43 @@ def home():
             'amount': expense.amount,
             'type': 'Expense'
         })
+
+    # Get the first and last day of the desired month
+    first_day_of_month = datetime(year, month, 1).date()  # Convert to datetime.date object
+    last_day_of_month = (datetime(year, month, 1) + timedelta(days=32)).replace(day=1).date() - timedelta(days=1)  # Convert to datetime.date object
+
     for recurring_charge in recurring_charges:
-        unified_data.append({
-            'category': recurring_charge.category,
-            'amount': recurring_charge.amount,
-            'type': 'Recurring Charge'
-        })
+        # Check if the recurring charge is active for the desired month
+        if (recurring_charge.start_date <= last_day_of_month and
+            (recurring_charge.end_date is None or recurring_charge.end_date >= first_day_of_month)):
+            # Ensure the day of the month does not exceed the last day of the month
+            day_of_month = min(recurring_charge.day_of_month, last_day_of_month.day)
+            # Calculate the date of the recurring charge for the desired month
+            recurring_date = datetime(year, month, day_of_month).date()  # Convert to datetime.date object
+            # Ensure the date is within the start and end dates of the recurring charge
+            if recurring_charge.start_date <= recurring_date and (recurring_charge.end_date is None or recurring_charge.end_date >= recurring_date):
+                unified_data.append({
+                    'category': recurring_charge.category,
+                    'amount': recurring_charge.amount,
+                    'type': 'Recurring Charge'
+                })
 
-    # Step 2: Aggregate Data by Category
-    aggregated_data = {}
+    # Step 2: Calculate Percentages
+    grand_total = sum(item['amount'] for item in unified_data)
     for item in unified_data:
-        category = item['category']
-        if category not in aggregated_data:
-            aggregated_data[category] = {
-                'category': category,
-                'amount': 0,
-                'type': item['type']
-            }
-        aggregated_data[category]['amount'] += item['amount']
-
-    # Convert aggregated data to list
-    aggregated_data_list = list(aggregated_data.values())
-
-    # Step 3: Calculate Percentages
-    grand_total = sum(item['amount'] for item in aggregated_data_list)
-    for item in aggregated_data_list:
         item['percentage_of_total'] = round((item['amount'] / grand_total) * 100, 2)
 
-    # Step 4: Sort the Data
-    sorted_data = sorted(aggregated_data_list, key=lambda x: x['category'])
+    # Step 3: Sort the Data
+    sorted_data = sorted(unified_data, key=lambda x: x['category'])
 
-    # Step 5: Pass the Data to the Template
+    # Step 4: Pass the Data to the Template
     return render_template(
         'index.html',
         data=sorted_data,
         grand_total=grand_total,
         desired_date=desired_date
     )
+
 
 @main.route('/expense_insights', methods=['GET'])
 @login_required
