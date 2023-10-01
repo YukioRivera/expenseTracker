@@ -7,4 +7,5 @@ create user?
 in the table in index.html the categories should collapse and units add up when showing table - DONE
 ml?
 neeed to also add https? 
-recurring expenses not appears after month they were created
+recurring expenses not appears after month they were created - DONE
+adding income section that is used to calculate income - maybe? Or just add it as a recurring with - 

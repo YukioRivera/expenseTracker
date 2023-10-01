@@ -80,15 +80,28 @@ def home():
                     'type': 'Recurring Charge'
                 })
 
-    # Step 2: Calculate Percentages
-    grand_total = sum(item['amount'] for item in unified_data)
+    # Step 2: Aggregate the Data by Category
+    aggregated_data = defaultdict(lambda: {'amount': 0, 'type': set()})
     for item in unified_data:
+        aggregated_data[item['category']]['amount'] += item['amount']
+        aggregated_data[item['category']]['type'].add(item['type'])
+
+    # Convert the aggregated data to a list of dictionaries
+    aggregated_data_list = [{
+        'category': category,
+        'amount': data['amount'],
+        'type': ', '.join(data['type'])
+    } for category, data in aggregated_data.items()]
+
+    # Step 3: Calculate Percentages
+    grand_total = sum(item['amount'] for item in aggregated_data_list)
+    for item in aggregated_data_list:
         item['percentage_of_total'] = round((item['amount'] / grand_total) * 100, 2)
 
-    # Step 3: Sort the Data
-    sorted_data = sorted(unified_data, key=lambda x: x['category'])
+    # Step 4: Sort the Data
+    sorted_data = sorted(aggregated_data_list, key=lambda x: x['category'])
 
-    # Step 4: Pass the Data to the Template
+    # Step 5: Pass the Data to the Template
     return render_template(
         'index.html',
         data=sorted_data,
@@ -112,15 +125,30 @@ def expense_insights():
         month_year_key = expense.date_time.strftime('%B %Y')  # e.g., "September 2023"
         expenses_by_month[month_year_key].append(expense)
         
-    # organize recurring expenses by month 
+    # Organize recurring expenses by month 
     recurring_expenses_by_month = defaultdict(list)
     for recurringCharge in recurring_charges:
-        month_year_key = recurringCharge.start_date.strftime('%B %Y')  # e.g., "September 2023"
-        recurring_expenses_by_month[month_year_key].append(recurringCharge)
+        start_date = recurringCharge.start_date.replace(day=1)  # Set to the first day of the month
+        end_date = recurringCharge.end_date
+        if end_date:
+            end_date = datetime(end_date.year, end_date.month, 1)  # Convert to datetime and set to the first day of the month
+        else:
+            end_date = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)  # Set to the first day of the current month
+        
+        # Iterate through each month in the range and add the recurring charge
+        current_date = datetime(start_date.year, start_date.month, 1)  # Convert to datetime and set to the first day of the month
+        while current_date <= end_date:
+            month_year_key = current_date.strftime('%B %Y')
+            recurring_expenses_by_month[month_year_key].append(recurringCharge)
+            # Move to the first day of the next month
+            current_date += timedelta(days=32)
+            current_date = current_date.replace(day=1)
     
     # Get all unique months from both expenses and recurring expenses
     all_months = set(expenses_by_month.keys()) | set(recurring_expenses_by_month.keys())
-    all_months = sorted(list(all_months))  # Sort the months
+    
+    # Sort the months chronologically
+    all_months = sorted(list(all_months), key=lambda x: datetime.strptime(x, '%B %Y'))
 
     return render_template(
         'expense_insights.html', 
