@@ -8,7 +8,8 @@
     <div class="monthly-container">
         <h2>{{ month }}</h2>
 
-        <button class="edit-btn" data-month="{{ month }}" onclick="toggleEdit(this)">Edit Entries</button>
+        <!-- Updated class name and removed onclick attribute -->
+        <button class="edit-entry-btn" data-month="{{ month }}">Edit Entries</button>
 
         <!-- Expenses Table -->
         {% if expenses_by_month[month] %}
@@ -31,7 +32,8 @@
                         <td class="entry-category" contenteditable="false">{{ entry.category }}</td>
                         <td class="entry-amount" contenteditable="false">{{ entry.amount }}</td>
                         <td class="delete-entry" style="display: none;">
-                            <button onclick="handleRemoveEntry(event)">Delete</button>
+                            <!-- Updated to remove inline event handler -->
+                            <button class="delete-entry-btn">Delete</button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -60,7 +62,8 @@
                         <td class="entry-category" contenteditable="false">{{ entry.category }}</td>
                         <td class="entry-amount" contenteditable="false">{{ entry.amount }}</td>
                         <td class="delete-entry" style="display: none;">
-                            <button onclick="handleRemoveEntry(event)">Delete</button>
+                            <!-- Updated to remove inline event handler -->
+                            <button class="delete-entry-btn">Delete</button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -70,96 +73,5 @@
     </div>
     {% endfor %}
 </div>
-
-<script>
-    function toggleEdit(button, type) {
-        const container = button.parentElement;
-        const rows = container.querySelectorAll('.entry-row');
-        const isEditing = button.textContent === 'Edit Entries';
-        
-        // Toggle contenteditable attribute for each entry
-        rows.forEach(row => {
-            row.querySelectorAll('td:not(.delete-entry)').forEach(cell => {
-                cell.setAttribute('contenteditable', isEditing ? "true" : "false");
-            });
-            
-            // Show/hide delete button for each row
-            const deleteButton = row.querySelector('.delete-entry');
-            if (isEditing) {
-                deleteButton.style.display = 'table-cell';
-            } else {
-                deleteButton.style.display = 'none';
-            }
-        });
-        
-        // Toggle button text
-        button.textContent = isEditing ? 'Apply' : 'Edit Entries';
-    
-        // If not editing, collect all the edited entries and send them to the server
-        if (!isEditing) {
-            const editedEntries = Array.from(rows).map(row => {
-                return {
-                    id: row.getAttribute('data-entry-id'),
-                    date: row.querySelector('.entry-date').textContent,
-                    time: row.querySelector('.entry-time').textContent,
-                    category: row.querySelector('.entry-category').textContent,
-                    amount: row.querySelector('.entry-amount').textContent,
-                    type: type  // 'expenses' or 'recurring'
-                };
-            });
-            updateEntries(editedEntries);
-        }
-    }
-
-    function updateEntries(entries) {
-        fetch('/update-entries', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ entries })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Error updating entries.');
-            }
-        });
-    }
-    
-    function handleRemoveEntry(event, type) {
-        const button = event.target;
-        const row = button.closest('.entry-row');
-        const entryId = row.getAttribute('data-entry-id');
-    
-        fetch('/remove-entry', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: entryId, type: type })  // 'expenses' or 'recurring'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                row.remove();
-                alert('Entry deleted successfully.');
-            } else {
-                alert('Error deleting entry.');
-            }
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error.message);
-        });
-    }
-    
-</script>
 
 {% endblock %}

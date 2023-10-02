@@ -201,8 +201,13 @@ def update_entry():
 def remove_entry():
     data = request.get_json()
     entry_id = data.get('id')
+    is_recurring = data.get('isRecurring', False)
     
-    entry = Expense.query.get(entry_id)
+    if is_recurring:
+        entry = RecurringCharge.query.get(entry_id)
+    else:
+        entry = Expense.query.get(entry_id)
+    
     if entry:
         try:
             db.session.delete(entry)

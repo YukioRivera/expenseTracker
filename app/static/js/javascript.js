@@ -7,95 +7,79 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initExpenseInsights() {
+    console.log('initExpenseInsights called');
+    // Update the class name to match your HTML
     document.querySelectorAll('.edit-entry-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            const row = btn.closest('.entry-row');
+            const container = btn.closest('.monthly-container');
             
-            // Make the fields editable
-            toggleEditableFields(row, true);
-            
-            // Hide the edit button and show the apply button
-            toggleEditApplyButtons(row, false);
+            // Toggle the editable fields and buttons
+            toggleEdit(container);  // Ensure this function name matches your definition
         });
     });
 
-    document.querySelectorAll('.apply-entry-btn').forEach(btn => {
+    document.querySelectorAll('.delete-entry-btn').forEach(btn => {
         btn.addEventListener('click', function() {
+            console.log('delete-entry-btn clicked');  // Add this line
             const row = btn.closest('.entry-row');
+
+            console.log(row);
             
-            // Extract the edited data and send to server
-            updateEntry(row);
-            
-            // Make the fields non-editable again
-            toggleEditableFields(row, false);
-            
-            // Hide the apply button and show the edit button
-            toggleEditApplyButtons(row, true);
+            // Handle entry removal
+            handleRemoveEntry(row, true);  // For a recurring charge
+            handleRemoveEntry(row, false);  // For a regular expense;
         });
     });
 }
 
-function toggleEditableFields(row, isEditable) {
-    row.querySelector('.entry-date').contentEditable = isEditable;
-    row.querySelector('.entry-time').contentEditable = isEditable;
-    row.querySelector('.entry-category').contentEditable = isEditable;
-    row.querySelector('.entry-amount').contentEditable = isEditable;
-}
-
-function toggleEditApplyButtons(row, isEditVisible) {
-    row.querySelector('.edit-entry-btn').style.display = isEditVisible ? 'block' : 'none';
-    row.querySelector('.apply-entry-btn').style.display = isEditVisible ? 'none' : 'block';
-}
-
-function updateEntry(row) {
-    const entryId = row.getAttribute('data-entry-id');
-    const date = row.querySelector('.entry-date').textContent;
-    const time = row.querySelector('.entry-time').textContent;
-    const category = row.querySelector('.entry-category').textContent;
-    const amount = row.querySelector('.entry-amount').textContent;
+function toggleEdit(container) {
+    const rows = container.querySelectorAll('.entry-row');
+    const isEditing = container.getAttribute('data-is-editing') === 'true';
     
-    fetch('/update-entry', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            entry_id: entryId,
-            date: date,
-            time: time,
-            category: category,
-            amount: amount
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            // Handle success message
-        } else if (data.error) {
-            // Handle error message
-        }
+    // Toggle contenteditable attribute for each entry
+    rows.forEach(row => {
+        row.querySelectorAll('td:not(.delete-entry)').forEach(cell => {
+            cell.setAttribute('contenteditable', isEditing ? "false" : "true");
+        });
+        
+        // Show/hide delete button for each row
+        const deleteButton = row.querySelector('.delete-entry');
+        deleteButton.style.display = isEditing ? 'none' : 'table-cell';
     });
+    
+    // Toggle button text
+    const editButton = container.querySelector('.edit-entry-btn');
+    editButton.textContent = isEditing ? 'Edit Entries' : 'Apply';
+    
+    // Update the data-is-editing attribute
+    container.setAttribute('data-is-editing', isEditing ? "false" : "true");
 }
 
-function handleRemoveEntry(event) {
-    const row = event.target.closest('.entry-row');
+function handleRemoveEntry(row, isRecurring) {
     const entryId = row.getAttribute('data-entry-id');
-
+    console.log(entryId);
+    
     fetch('/remove-entry', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: entryId })
+        body: JSON.stringify({ id: entryId, isRecurring: isRecurring })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             row.remove();  // Remove the entry from the table
         } else {
             alert('Error removing entry.');
         }
-    });
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 // This function should be called from the appropriate places
