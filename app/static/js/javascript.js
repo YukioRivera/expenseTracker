@@ -8,26 +8,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initExpenseInsights() {
     console.log('initExpenseInsights called');
-    // Update the class name to match your HTML
     document.querySelectorAll('.edit-entry-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const container = btn.closest('.monthly-container');
             
             // Toggle the editable fields and buttons
-            toggleEdit(container);  // Ensure this function name matches your definition
+            toggleEdit(container);
         });
     });
 
     document.querySelectorAll('.delete-entry-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            console.log('delete-entry-btn clicked');  // Add this line
             const row = btn.closest('.entry-row');
-
-            console.log(row);
-            
-            // Handle entry removal
             handleRemoveEntry(row, true);  // For a recurring charge
             handleRemoveEntry(row, false);  // For a regular expense;
+        });
+    });
+
+    // Track edited rows
+    document.querySelectorAll('.entry-row').forEach(row => {
+        row.addEventListener('input', function() {
+            row.classList.add('edited-entry-row');
         });
     });
 }
@@ -57,7 +58,6 @@ function toggleEdit(container) {
 
 function handleRemoveEntry(row, isRecurring) {
     const entryId = row.getAttribute('data-entry-id');
-    console.log(entryId);
     
     fetch('/remove-entry', {
         method: 'POST',
@@ -82,14 +82,44 @@ function handleRemoveEntry(row, isRecurring) {
     .catch(error => console.error('Error:', error));
 }
 
-// This function should be called from the appropriate places
-function toggleRemoveButtonVisibility(row, isEditing) {
-    const removeButtonContainer = row.querySelector('.remove-container');
-    if (isEditing) {
-        removeButtonContainer.style.display = 'flex'; // Use 'flex' to maintain the centering of the "x"
-        removeButtonContainer.addEventListener('click', handleRemoveEntry);
-    } else {
-        removeButtonContainer.style.display = 'none';
-        removeButtonContainer.removeEventListener('click', handleRemoveEntry);
-    }
+function collectEditedEntries() {
+    const editedEntryRows = document.querySelectorAll('.edited-entry-row');
+    const editedEntries = Array.from(editedEntryRows).map(row => {
+        return {
+            id: row.dataset.entryId,
+            date: row.querySelector('.entry-date').textContent,
+            time: row.querySelector('.entry-time').textContent,
+            category: row.querySelector('.entry-category').textContent,
+            amount: row.querySelector('.entry-amount').textContent,
+            endDate: row.querySelector('.entry-end-date') ? row.querySelector('.entry-end-date').textContent : null
+        };
+    });
+    console.log("editedEntries:", editedEntries);
+    return editedEntries;
+}
+
+document.querySelector('#edit-entries-btn').addEventListener('click', function() {
+    const editedEntries = collectEditedEntries();
+    updateEntries(editedEntries);
+});
+
+function updateEntries(entries) {
+    fetch('/update-entries', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ entries: entries }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Entries updated successfully');
+        } else {
+            console.error('Error updating entries:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }

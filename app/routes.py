@@ -6,6 +6,9 @@ from collections import defaultdict
 from flask import jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 main = Blueprint('main', __name__)
@@ -177,6 +180,33 @@ def submit():
 
     return redirect(url_for('main.home'))
 
+@main.route('/remove-entry', methods=['POST'])
+@login_required
+def remove_entry():
+    data = request.get_json()
+    entry_id = data.get('id')
+    is_recurring = data.get('isRecurring', False)
+    
+    logging.info(f"is_recurring: {is_recurring}")
+    if is_recurring:
+        entry = RecurringCharge.query.get(entry_id)
+    else:
+        entry = Expense.query.get(entry_id)
+    
+    if entry:
+        try:
+            db.session.delete(entry)
+            db.session.commit()
+            logging.info("db commit try")
+            return jsonify({'success': True})
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"db commit False, line 220: {str(e)}")
+            return jsonify({'success': False, 'message': str(e)})
+    else:
+        logging.error("db commit false, line 223, 2nd if else")
+        return jsonify({'success': False, 'message': 'Entry not found'}), 404
+
 @main.route('/update-entry', methods=['POST'])
 @login_required
 def update_entry():
@@ -196,33 +226,13 @@ def update_entry():
         return {"success": True}, 200
     return {"success": False, "message": "Entry not found"}, 404
 
-@main.route('/remove-entry', methods=['POST'])
-@login_required
-def remove_entry():
-    data = request.get_json()
-    entry_id = data.get('id')
-    is_recurring = data.get('isRecurring', False)
-    
-    if is_recurring:
-        entry = RecurringCharge.query.get(entry_id)
-    else:
-        entry = Expense.query.get(entry_id)
-    
-    if entry:
-        try:
-            db.session.delete(entry)
-            db.session.commit()
-            return jsonify({'success': True})
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'success': False, 'message': str(e)})
-    else:
-        return jsonify({'success': False, 'message': 'Entry not found'}), 404
 
 @main.route('/update-entries', methods=['POST'])
 @login_required
 def update_entries():
+    logging.info("Entered update_entries function")  # New log statement
     entries = request.json.get('entries', [])
+    logging.info(f'Entries to update: {entries}')  # Log the entries payload
     try:
         for entry_data in entries:
             entry_id = entry_data['id']
@@ -238,6 +248,7 @@ def update_entries():
         db.session.commit()
         return jsonify({'success': True})
     except Exception as e:
+        logging.exception(f'Error updating entries: {e}')  # Log any errors
         db.session.rollback()
         return jsonify({'success': False, 'message': str(e)}), 500
 

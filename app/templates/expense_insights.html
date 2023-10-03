@@ -9,7 +9,7 @@
         <h2>{{ month }}</h2>
 
         <!-- Updated class name and removed onclick attribute -->
-        <button class="edit-entry-btn" data-month="{{ month }}">Edit Entries</button>
+        <button id="edit-entries-btn" class="edit-entry-btn" data-month="{{ month }}">Edit Entries</button>
 
         <!-- Expenses Table -->
         {% if expenses_by_month[month] %}
