@@ -298,3 +298,23 @@ def add_recurring():
         flash(f'Error: {e}', 'danger')
 
     return redirect(url_for('main.home'))
+
+@main.route('/update-recurring-entries', methods=['POST'])
+@login_required
+def update_recurring_entries():
+    data = request.get_json()
+    entries = data.get('entries')
+    
+    for entry in entries:
+        recurring_charge = RecurringCharge.query.get(entry['id'])
+        recurring_charge.start_date = datetime.strptime(entry['startDate'], '%Y-%m-%d')
+        recurring_charge.end_date = datetime.strptime(entry['endDate'], '%Y-%m-%d') if entry['endDate'] != 'N/A' else None
+        recurring_charge.category = entry['category']
+        recurring_charge.amount = float(entry['amount'])
+    
+    try:
+        db.session.commit()
+        return jsonify(success=True)
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(success=False, message=str(e))

@@ -31,6 +31,14 @@ function initExpenseInsights() {
             row.classList.add('edited-entry-row');
         });
     });
+
+    // Track edited rows for recurring expenses
+    document.querySelectorAll('.recurring-entry-row').forEach(row => {
+        row.addEventListener('input', function() {
+            row.classList.add('edited-recurring-entry-row');
+        });
+    });
+
 }
 
 function toggleEdit(container) {
@@ -84,24 +92,53 @@ function handleRemoveEntry(row, isRecurring) {
 
 function collectEditedEntries() {
     const editedEntryRows = document.querySelectorAll('.edited-entry-row');
-    const editedEntries = Array.from(editedEntryRows).map(row => {
-        return {
-            id: row.dataset.entryId,
-            date: row.querySelector('.entry-date').textContent,
-            time: row.querySelector('.entry-time').textContent,
-            category: row.querySelector('.entry-category').textContent,
-            amount: row.querySelector('.entry-amount').textContent,
-            endDate: row.querySelector('.entry-end-date') ? row.querySelector('.entry-end-date').textContent : null
-        };
+    const regularEntries = [];
+    const recurringEntries = [];
+
+    Array.from(editedEntryRows).forEach(row => {
+        if (row.classList.contains('recurring-entry-row')) {
+            // Handle recurring expenses
+            recurringEntries.push({
+                id: row.dataset.entryId,
+                startDate: row.querySelector('.entry-date').textContent,
+                endDate: row.querySelector('.entry-end-date').textContent,
+                category: row.querySelector('.entry-category').textContent,
+                amount: row.querySelector('.entry-amount').textContent
+            });
+        } else {
+            // Handle regular expenses
+            regularEntries.push({
+                id: row.dataset.entryId,
+                date: row.querySelector('.entry-date').textContent,
+                time: row.querySelector('.entry-time').textContent,
+                category: row.querySelector('.entry-category').textContent,
+                amount: row.querySelector('.entry-amount').textContent
+            });
+        }
     });
-    console.log("editedEntries:", editedEntries);
-    return editedEntries;
+
+    console.log("Regular Entries:", regularEntries);
+    console.log("Recurring Entries:", recurringEntries);
+
+    return {
+        regularEntries: regularEntries,
+        recurringEntries: recurringEntries
+    };
 }
 
 document.querySelector('#edit-entries-btn').addEventListener('click', function() {
-    const editedEntries = collectEditedEntries();
-    updateEntries(editedEntries);
+    const { regularEntries, recurringEntries } = collectEditedEntries();
+    
+    if (regularEntries.length > 0) {
+        updateEntries(regularEntries);
+    }
+
+    if (recurringEntries.length > 0) {
+        updateRecurringEntries(recurringEntries);
+    }
 });
+
+
 
 function updateEntries(entries) {
     fetch('/update-entries', {
@@ -117,6 +154,27 @@ function updateEntries(entries) {
             console.log('Entries updated successfully');
         } else {
             console.error('Error updating entries:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function updateRecurringEntries(entries) {
+    fetch('/update-recurring-entries', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ entries: entries }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Recurring entries updated successfully');
+        } else {
+            console.error('Error updating recurring entries:', data.message);
         }
     })
     .catch(error => {

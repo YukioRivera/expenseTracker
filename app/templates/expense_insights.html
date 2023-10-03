@@ -56,7 +56,7 @@
             </thead>
             <tbody>
                 {% for entry in recurring_expenses_by_month[month] %}
-                    <tr class="entry-row" data-entry-id="{{ entry.id }}">
+                    <tr class="recurring-entry-row entry-row" data-entry-id="{{ entry.id }}">
                         <td class="entry-date" contenteditable="false">{{ entry.start_date.strftime('%Y-%m-%d') }}</td>
                         <td class="entry-end-date" contenteditable="false">{{ entry.end_date.strftime('%Y-%m-%d') if entry.end_date else 'N/A' }}</td>  <!-- Changed this line -->
                         <td class="entry-category" contenteditable="false">{{ entry.category }}</td>
