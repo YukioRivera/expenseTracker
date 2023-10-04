@@ -126,19 +126,23 @@ function collectEditedEntries() {
     };
 }
 
-document.querySelector('#edit-entries-btn').addEventListener('click', function() {
-    const { regularEntries, recurringEntries } = collectEditedEntries();
-    
-    if (regularEntries.length > 0) {
-        updateEntries(regularEntries);
-    }
+// Select all buttons with the class .edit-entry-btn
+const editButtons = document.querySelectorAll('.edit-entry-btn');
 
-    if (recurringEntries.length > 0) {
-        updateRecurringEntries(recurringEntries);
-    }
+// Attach the event listener to each button
+editButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const { regularEntries, recurringEntries } = collectEditedEntries();
+        
+        if (regularEntries.length > 0) {
+            updateEntries(regularEntries);
+        }
+
+        if (recurringEntries.length > 0) {
+            updateRecurringEntries(recurringEntries);
+        }
+    });
 });
-
-
 
 function updateEntries(entries) {
     fetch('/update-entries', {
