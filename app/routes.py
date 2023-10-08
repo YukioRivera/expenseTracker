@@ -214,7 +214,7 @@ def update_entry():
     print("data", data)
     entry_id = data['id']
     date = data['date']
-    time = data['time']
+    # time = data['time']
     category = data['category']
     amount = data['amount']
     entry = Expense.query.get(entry_id)
@@ -237,12 +237,14 @@ def update_entries():
         for entry_data in entries:
             entry_id = entry_data['id']
             date = entry_data['date']
-            time = entry_data['time']
             category = entry_data['category']
             amount = entry_data['amount']
+            description = entry_data['description']
+            # date_time = entry_data['time']
             entry = Expense.query.get(entry_id)
             if entry:
-                entry.date_time = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M:%S")  # Convert string to datetime
+                entry.description = description  # Set the description
+                # entry.date_time = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M:%S")  # Convert string to datetime
                 entry.category = category
                 entry.amount = float(amount)  # Convert string to float
         db.session.commit()
