@@ -18,7 +18,8 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Time</th>
+                    <!-- Replace Time column with Description column -->
+                    <th>Description</th>
                     <th>Category</th>
                     <th>Amount</th>
                     <th></th> <!-- Placeholder for delete button header -->
@@ -28,7 +29,8 @@
                 {% for entry in expenses_by_month[month] %}
                     <tr class="entry-row" data-entry-id="{{ entry.id }}">
                         <td class="entry-date" contenteditable="false">{{ entry.date_time.strftime('%Y-%m-%d') }}</td>
-                        <td class="entry-time" contenteditable="false">{{ entry.date_time.strftime('%H:%M:%S') }}</td>
+                        <!-- Update here to display description instead of time -->
+                        <td class="entry-description" contenteditable="false">{{ entry.description }}</td>
                         <td class="entry-category" contenteditable="false">{{ entry.category }}</td>
                         <td class="entry-amount" contenteditable="false">{{ entry.amount }}</td>
                         <td class="delete-entry" style="display: none;">
