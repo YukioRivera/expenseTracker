@@ -6,6 +6,7 @@ class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float, nullable=False)
     category = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(255), nullable=True)  # Assuming description is of type String and is nullable
     date_time = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):

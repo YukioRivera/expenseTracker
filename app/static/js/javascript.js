@@ -110,7 +110,8 @@ function collectEditedEntries() {
             regularEntries.push({
                 id: row.dataset.entryId,
                 date: row.querySelector('.entry-date').textContent,
-                time: row.querySelector('.entry-time').textContent,
+                // time: row.querySelector('.entry-time').textContent,
+                description: row.querySelector('.entry-description').textContent,
                 category: row.querySelector('.entry-category').textContent,
                 amount: row.querySelector('.entry-amount').textContent
             });
