@@ -244,7 +244,8 @@ def update_entries():
             entry = Expense.query.get(entry_id)
             if entry:
                 entry.description = description  # Set the description
-                # entry.date_time = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M:%S")  # Convert string to datetime
+                # entry.date_time = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M:%S")  # Convert string to datetime(including time)
+                entry.date_time = datetime.strptime(f"{date}", "%Y-%m-%d")  # Convert string to datetime
                 entry.category = category
                 entry.amount = float(amount)  # Convert string to float
         db.session.commit()
