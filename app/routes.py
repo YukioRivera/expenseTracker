@@ -311,7 +311,13 @@ def update_recurring_entries():
     for entry in entries:
         recurring_charge = RecurringCharge.query.get(entry['id'])
         recurring_charge.start_date = datetime.strptime(entry['startDate'], '%Y-%m-%d')
-        recurring_charge.end_date = datetime.strptime(entry['endDate'], '%Y-%m-%d') if entry['endDate'] != 'N/A' else None
+        
+        # Handle the case where entry['endDate'] is None
+        if entry['endDate'] and entry['endDate'] != 'N/A':
+            recurring_charge.end_date = datetime.strptime(entry['endDate'], '%Y-%m-%d')
+        else:
+            recurring_charge.end_date = None
+        
         recurring_charge.category = entry['category']
         recurring_charge.amount = float(entry['amount'])
     
@@ -321,3 +327,4 @@ def update_recurring_entries():
     except Exception as e:
         db.session.rollback()
         return jsonify(success=False, message=str(e))
+
