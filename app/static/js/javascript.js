@@ -101,7 +101,8 @@ function collectEditedEntries() {
             recurringEntries.push({
                 id: row.dataset.entryId,
                 startDate: row.querySelector('.entry-date').value,  // Changed to .value
-                endDate: row.querySelector('.entry-end-date').value,  // Changed to .value
+                // endDate: row.querySelector('.entry-end-date').value,  // Changed to .value
+                endDate: row.querySelector('.entry-end-date').value || null,  // Use the ternary operation here
                 category: row.querySelector('.entry-category').textContent,
                 amount: row.querySelector('.entry-amount').textContent
             });
@@ -174,7 +175,14 @@ function updateRecurringEntries(entries) {
         },
         body: JSON.stringify({ entries: entries }),
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error(`Request failed with status ${response.status}: ${text}`);
+            });
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             console.log('Recurring entries updated successfully');
@@ -186,3 +194,4 @@ function updateRecurringEntries(entries) {
         console.error('Error:', error);
     });
 }
+
