@@ -100,8 +100,8 @@ function collectEditedEntries() {
             // Handle recurring expenses
             recurringEntries.push({
                 id: row.dataset.entryId,
-                startDate: row.querySelector('.entry-date').textContent,
-                endDate: row.querySelector('.entry-end-date').textContent,
+                startDate: row.querySelector('.entry-date').value,  // Changed to .value
+                endDate: row.querySelector('.entry-end-date').value,  // Changed to .value
                 category: row.querySelector('.entry-category').textContent,
                 amount: row.querySelector('.entry-amount').textContent
             });
@@ -109,8 +109,7 @@ function collectEditedEntries() {
             // Handle regular expenses
             regularEntries.push({
                 id: row.dataset.entryId,
-                date: row.querySelector('.entry-date').textContent,
-                // time: row.querySelector('.entry-time').textContent,
+                date: row.querySelector('.entry-date').value,  // Changed to .value
                 description: row.querySelector('.entry-description').textContent,
                 category: row.querySelector('.entry-category').textContent,
                 amount: row.querySelector('.entry-amount').textContent
@@ -126,6 +125,7 @@ function collectEditedEntries() {
         recurringEntries: recurringEntries
     };
 }
+
 
 // Select all buttons with the class .edit-entry-btn
 const editButtons = document.querySelectorAll('.edit-entry-btn');
