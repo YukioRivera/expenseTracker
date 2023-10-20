@@ -17,4 +17,4 @@ combine the two entry tables
 
 bugs:
 you can add weird values  
-calendar not pushing
+calendar not pushing - done 
