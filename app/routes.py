@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from app.models import Expense, User, RecurringCharge
 from app import db, login_manager
 from collections import defaultdict
@@ -47,6 +47,7 @@ def logout():
 def home():
     desired_date = request.args.get('date', default=datetime.now().strftime('%Y-%m'))
     year, month = map(int, desired_date.split('-'))
+    current_date = datetime.now().strftime('%Y-%m-%d')  # Format the current date to "yyyy-MM-dd"
 
     # Execute the SQL query for Expenses
     expenses = Expense.query.filter(db.extract('year', Expense.date_time) == year, db.extract('month', Expense.date_time) == month).all()
@@ -116,7 +117,8 @@ def home():
         'index.html',
         data=sorted_data,
         grand_total=grand_total,
-        desired_date=desired_date
+        desired_date=desired_date,
+        current_date=current_date  # Pass the current_date to the template
     )
 
 
@@ -177,6 +179,7 @@ def submit():
 
     # Insert data into the database
     expense = Expense(amount=amount, category=category, date_time=date_time, description=description)  # Set the description attribute
+    
     try:
         db.session.add(expense)
         db.session.commit()
