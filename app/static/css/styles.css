@@ -1,24 +1,28 @@
 /* Navbar Styles */
 .navbar {
-    background-color: #007BFF; /* Primary blue color */
+    background-color: #e6f2ff; /* Soft blue color */
     overflow: hidden;
-    padding: 10px 0;
+    padding: 15px 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
 }
 
 .navbar a {
-    float: left;
-    display: block;
-    color: white;
+    display: inline-block;
+    color: #007BFF; /* Primary blue color */
     text-align: center;
-    padding: 10px 15px;
+    padding: 10px 20px;
     text-decoration: none;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0 10px;
+    border-radius: 5px;
 }
 
 .navbar a:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #007BFF; /* Primary blue color on hover */
+    color: white;
 }
 
 /* General Styles */
@@ -27,81 +31,90 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+    font-size: 14px; /* Base font size */
 }
 
 .container {
     max-width: 800px;
     margin: 50px auto;
     background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px; /* Increased padding */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* Rounded corners */
 }
 
 /* Month Dropdown Styles */
 .month-dropdown {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .month-dropdown label {
     font-weight: bold;
+    font-size: 16px; /* Increased font size */
 }
 
 .month-dropdown select {
-    padding: 5px;
-    margin-left: 10px;
+    padding: 8px;
+    margin-left: 15px;
+    font-size: 14px; /* Increased font size */
+    border-radius: 5px; /* Rounded corners */
 }
 
 /* Form Wrapper Styles */
 .form-wrapper {
-    padding: 20px;
+    padding: 25px; /* Increased padding */
     border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 20px; /* Adds space between forms */
-    background-color: #fff; /* White background */
+    border-radius: 10px; /* More rounded corners */
+    margin-bottom: 25px; /* Increased margin */
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* Subtle box shadow */
 }
 
 /* Unified Form Styles */
 .data-entry-form .input-group,
 .recurring-charges-form .input-group {
-    margin-bottom: 15px; /* Adds space between form fields */
+    margin-bottom: 20px; /* Increased margin */
 }
 
 .data-entry-form input,
 .data-entry-form select,
 .recurring-charges-form input,
 .recurring-charges-form select {
-    padding: 5px;
-    margin: 5px 0;
+    padding: 8px; /* Increased padding */
+    margin: 8px 0; /* Increased margin */
     width: 100%;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 6px; /* Rounded corners */
+    font-size: 14px; /* Increased font size */
 }
 
 .data-entry-form button,
 .recurring-charges-form button {
-    background-color: #007BFF; /* Primary blue color */
+    background-color: #007BFF;
     border: none;
     color: white;
-    padding: 12px 24px;
+    padding: 14px 26px; /* Increased padding */
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    font-size: 16px; /* Increased font size */
+    margin: 6px 2px;
     cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
+    border-radius: 10px; /* More rounded corners */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Added transform transition */
 }
 
 .data-entry-form button:hover,
 .recurring-charges-form button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
+    transform: scale(1.05); /* Scale effect on hover */
 }
 
 /* Expenses Table Styles */
 .expenses-table {
-    width: 100%;
+    /* width: 100%; */
     border-collapse: collapse;
+    margin-bottom: 30px; /* Space between Expenses and Recurring Expenses */
 }
 
 .expenses-table thead {
@@ -144,40 +157,69 @@ body {
     background-color: #0056b3; /* Darker blue on hover */
 }
 
-/* Additional styles for expense_insights.html */
+/* Additional styles for expense_history.html */
 .monthly-container {
-    margin-bottom: 30px;
+    background-color: #e0e0e0; /* Darker shade of grey */
+    border: 1px solid #ccc; /* Border for the container */
+    border-radius: 5px;
+    padding: 25px; /* Increased padding */
+    margin-bottom: 40px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Added a subtle shadow for depth */
 }
 
-.monthly-container h3 {
-    border-bottom: 2px solid #007BFF;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+/* Month heading */  
+.monthly-container h2 {
+    font-size: 22px; /* Increased font size for better visibility */
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc; /* Added a border under the heading */
+    padding-bottom: 10px; /* Padding under the heading */
 }
 
-/* Expenses and Recurring Expenses Table Styles */
-.expenses-table, .recurring-expenses-table {
-    width: 100%;
-    border-collapse: collapse;
+/* Divider between Expenses and Recurring Expenses */
+.expenses-table + h3 {
+    border-top: 2px solid #ccc; /* Darker and thicker border */
+    padding-top: 25px; /* Increased padding */
+    margin-top: 25px; /* Increased margin */
+    font-size: 20px; /* Increased font size */
 }
 
-.expenses-table thead, .recurring-expenses-table thead {
-    background-color: #007BFF;
-    color: #fff;
+/* Subtle background for Recurring Expenses rows */
+.recurring-entry-row {
+    background-color: #f0f0f0; /* Slightly darker shade for recurring rows */
 }
 
-.expenses-table th, .expenses-table td,
-.recurring-expenses-table th, .recurring-expenses-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
+
+/* Tab Styles */
+.nav-tabs {
+    border-bottom: 1px solid #ddd;
 }
 
-.expenses-table tbody tr:nth-child(even),
-.recurring-expenses-table tbody tr:nth-child(even) {
+.nav-item {
+    margin-bottom: -1px; /* To fix the border overlap */
+}
+
+.nav-link {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
     background-color: #f2f2f2;
 }
 
-.expenses-table tfoot, .recurring-expenses-table tfoot {
-    font-weight: bold;
+.nav-link.active {
+    color: #007BFF;
+    background-color: #fff;
+    border-color: #ddd #ddd #fff; /* Remove border at the bottom for active tab */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    .navbar a {
+        padding: 8px 15px;
+    }
 }

@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if the current page is the expense_insights.html page
+    // Check if the current page is the history.html page
     if (document.querySelector('.monthly-container')) {
-        initExpenseInsights();
+        initExpenseHistory();
     }
     // Add more initializations for other pages as needed
 });
 
-function initExpenseInsights() {
-    console.log('initExpenseInsights called');
+function initExpenseHistory() {
+    console.log('initExpenseHistory called');
     document.querySelectorAll('.edit-entry-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const container = btn.closest('.monthly-container');
@@ -195,3 +195,17 @@ function updateRecurringEntries(entries) {
     });
 }
 
+
+function openForm(formName) {
+    var i, formContent, tablinks;
+    formContent = document.getElementsByClassName("form-content");
+    for (i = 0; i < formContent.length; i++) {
+        formContent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
+    document.getElementById(formName).style.display = "block";
+    event.currentTarget.classList.add("active");
+}

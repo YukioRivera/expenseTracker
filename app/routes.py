@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from app.models import Expense, User, RecurringCharge
 from app import db, login_manager
 from collections import defaultdict
@@ -47,6 +47,7 @@ def logout():
 def home():
     desired_date = request.args.get('date', default=datetime.now().strftime('%Y-%m'))
     year, month = map(int, desired_date.split('-'))
+    current_date = datetime.now().strftime('%Y-%m-%d')  # Format the current date to "yyyy-MM-dd"
 
     # Execute the SQL query for Expenses
     expenses = Expense.query.filter(db.extract('year', Expense.date_time) == year, db.extract('month', Expense.date_time) == month).all()
@@ -105,17 +106,25 @@ def home():
     sorted_data = sorted(aggregated_data_list, key=lambda x: x['category'])
 
     # Step 5: Pass the Data to the Template
+    if request.method == 'POST':
+        # Handle the form submission here
+        # For example, if you have a form field named 'new_date':
+        new_date = request.form.get('new_date')
+        if new_date:
+            return redirect(url_for('main.home', date=new_date))
+    
     return render_template(
         'index.html',
         data=sorted_data,
         grand_total=grand_total,
-        desired_date=desired_date
+        desired_date=desired_date,
+        current_date=current_date  # Pass the current_date to the template
     )
 
 
-@main.route('/expense_insights', methods=['GET'])
+@main.route('/expense_history', methods=['GET'])
 @login_required
-def expense_insights():
+def expense_history():
     # Fetch all expenses
     all_expenses = Expense.query.order_by(Expense.date_time).all()
     
@@ -154,7 +163,7 @@ def expense_insights():
     all_months = sorted(list(all_months), key=lambda x: datetime.strptime(x, '%B %Y'))
 
     return render_template(
-        'expense_insights.html', 
+        'expense_history.html', 
         expenses_by_month=expenses_by_month,
         recurring_expenses_by_month=recurring_expenses_by_month,
         all_months=all_months  # Pass the sorted list of all months to the template
@@ -164,12 +173,13 @@ def expense_insights():
 @login_required
 def submit():
     amount = float(request.form.get('amount'))
-    category = request.form.get('category').lower()
+    category = request.form.get('category').lower() # Convert the category to lowercase
+    description = request.form.get('description').lower()  # Convert the description to lowercase
     date_time = datetime.now()
 
     # Insert data into the database
-    expense = Expense(amount=amount, category=category, date_time=date_time)
-    # this was added check this if the website doesnt work 
+    expense = Expense(amount=amount, category=category, date_time=date_time, description=description)  # Set the description attribute
+    
     try:
         db.session.add(expense)
         db.session.commit()
@@ -179,6 +189,7 @@ def submit():
         flash(f'Error: {e}', 'danger')
 
     return redirect(url_for('main.home'))
+
 
 @main.route('/remove-entry', methods=['POST'])
 @login_required
@@ -237,9 +248,10 @@ def update_entries():
         for entry_data in entries:
             entry_id = entry_data['id']
             date = entry_data['date']
-            category = entry_data['category']
+            description = entry_data['description'].lower()  # Convert the description to lowercase
+            category = entry_data['category'].lower()   # Convert the category to lowercase
             amount = entry_data['amount']
-            description = entry_data['description']
+            # description = entry_data['description']
             # date_time = entry_data['time']
             entry = Expense.query.get(entry_id)
             if entry:
@@ -318,7 +330,7 @@ def update_recurring_entries():
         else:
             recurring_charge.end_date = None
         
-        recurring_charge.category = entry['category']
+        recurring_charge.category = entry['category'].lower()
         recurring_charge.amount = float(entry['amount'])
     
     try:
