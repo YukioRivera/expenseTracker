@@ -105,6 +105,13 @@ def home():
     sorted_data = sorted(aggregated_data_list, key=lambda x: x['category'])
 
     # Step 5: Pass the Data to the Template
+    if request.method == 'POST':
+        # Handle the form submission here
+        # For example, if you have a form field named 'new_date':
+        new_date = request.form.get('new_date')
+        if new_date:
+            return redirect(url_for('main.home', date=new_date))
+    
     return render_template(
         'index.html',
         data=sorted_data,
@@ -166,10 +173,10 @@ def submit():
     amount = float(request.form.get('amount'))
     category = request.form.get('category').lower()
     date_time = datetime.now()
+    description = request.form.get('description')  # Extract the description from the form data
 
     # Insert data into the database
-    expense = Expense(amount=amount, category=category, date_time=date_time)
-    # this was added check this if the website doesnt work 
+    expense = Expense(amount=amount, category=category, date_time=date_time, description=description)  # Set the description attribute
     try:
         db.session.add(expense)
         db.session.commit()
@@ -179,6 +186,7 @@ def submit():
         flash(f'Error: {e}', 'danger')
 
     return redirect(url_for('main.home'))
+
 
 @main.route('/remove-entry', methods=['POST'])
 @login_required
