@@ -173,9 +173,9 @@ def expense_insights():
 @login_required
 def submit():
     amount = float(request.form.get('amount'))
-    category = request.form.get('category').lower()
+    category = request.form.get('category').lower() # Convert the category to lowercase
+    description = request.form.get('description').lower()  # Convert the description to lowercase
     date_time = datetime.now()
-    description = request.form.get('description')  # Extract the description from the form data
 
     # Insert data into the database
     expense = Expense(amount=amount, category=category, date_time=date_time, description=description)  # Set the description attribute
@@ -248,9 +248,10 @@ def update_entries():
         for entry_data in entries:
             entry_id = entry_data['id']
             date = entry_data['date']
-            category = entry_data['category']
+            description = entry_data['description'].lower()  # Convert the description to lowercase
+            category = entry_data['category'].lower()   # Convert the category to lowercase
             amount = entry_data['amount']
-            description = entry_data['description']
+            # description = entry_data['description']
             # date_time = entry_data['time']
             entry = Expense.query.get(entry_id)
             if entry:
@@ -329,7 +330,7 @@ def update_recurring_entries():
         else:
             recurring_charge.end_date = None
         
-        recurring_charge.category = entry['category']
+        recurring_charge.category = entry['category'].lower()
         recurring_charge.amount = float(entry['amount'])
     
     try:
