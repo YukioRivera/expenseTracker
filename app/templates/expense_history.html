@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <h2>Expense Insights</h2>
+    <h2>Expense History</h2>
 
     {% for month in all_months|reverse %}
     <div class="monthly-container">
@@ -44,7 +44,8 @@
             </tbody>
         </table>
         {% endif %}
-
+        
+        <br>
         <!-- Recurring Expenses Table -->
         {% if recurring_expenses_by_month[month] | reverse %}
         <h3>Recurring Expenses</h3>

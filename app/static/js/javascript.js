@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if the current page is the expense_insights.html page
+    // Check if the current page is the history.html page
     if (document.querySelector('.monthly-container')) {
-        initExpenseInsights();
+        initExpenseHistory();
     }
     // Add more initializations for other pages as needed
 });
 
-function initExpenseInsights() {
-    console.log('initExpenseInsights called');
+function initExpenseHistory() {
+    console.log('initExpenseHistory called');
     document.querySelectorAll('.edit-entry-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const container = btn.closest('.monthly-container');

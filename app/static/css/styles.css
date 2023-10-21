@@ -100,8 +100,9 @@ body {
 
 /* Expenses Table Styles */
 .expenses-table {
-    width: 100%;
+    /* width: 100%; */
     border-collapse: collapse;
+    margin-bottom: 30px; /* Space between Expenses and Recurring Expenses */
 }
 
 .expenses-table thead {
@@ -146,40 +147,28 @@ body {
 
 /* Additional styles for expense_insights.html */
 .monthly-container {
-    margin-bottom: 30px;
-}
-
-.monthly-container h3 {
-    border-bottom: 2px solid #007BFF;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-/* Expenses and Recurring Expenses Table Styles */
-.expenses-table, .recurring-expenses-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.expenses-table thead, .recurring-expenses-table thead {
-    background-color: #007BFF;
-    color: #fff;
-}
-
-.expenses-table th, .expenses-table td,
-.recurring-expenses-table th, .recurring-expenses-table td {
-    padding: 10px;
+    background-color: #f5f5f5; /* Updated background color */
     border: 1px solid #ddd;
-    text-align: left;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 40px; /* Increased spacing between monthly containers */
 }
 
-.expenses-table tbody tr:nth-child(even),
-.recurring-expenses-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+/* Month heading */  
+.monthly-container h2 {
+    font-size: 20px; /* Smaller heading size */
+    margin-bottom: 10px; /* Add spacing under heading */
 }
 
-.expenses-table tfoot, .recurring-expenses-table tfoot {
-    font-weight: bold;
+/* Divider between Expenses and Recurring Expenses */
+.expenses-table + h3 {
+    border-top: 1px solid #ddd;
+    padding-top: 20px; 
+}
+
+/* Subtle background for Recurring Expenses rows */
+.recurring-entry-row {
+    background-color: #f9f9f9;
 }
 
 /* Tab Styles */

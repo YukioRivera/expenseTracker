@@ -122,9 +122,9 @@ def home():
     )
 
 
-@main.route('/expense_insights', methods=['GET'])
+@main.route('/expense_history', methods=['GET'])
 @login_required
-def expense_insights():
+def expense_history():
     # Fetch all expenses
     all_expenses = Expense.query.order_by(Expense.date_time).all()
     
@@ -163,7 +163,7 @@ def expense_insights():
     all_months = sorted(list(all_months), key=lambda x: datetime.strptime(x, '%B %Y'))
 
     return render_template(
-        'expense_insights.html', 
+        'expense_history.html', 
         expenses_by_month=expenses_by_month,
         recurring_expenses_by_month=recurring_expenses_by_month,
         all_months=all_months  # Pass the sorted list of all months to the template
