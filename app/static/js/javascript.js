@@ -195,3 +195,17 @@ function updateRecurringEntries(entries) {
     });
 }
 
+
+function openForm(formName) {
+    var i, formContent, tablinks;
+    formContent = document.getElementsByClassName("form-content");
+    for (i = 0; i < formContent.length; i++) {
+        formContent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
+    document.getElementById(formName).style.display = "block";
+    event.currentTarget.classList.add("active");
+}

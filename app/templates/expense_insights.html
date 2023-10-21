@@ -4,7 +4,7 @@
 <div class="container">
     <h2>Expense Insights</h2>
 
-    {% for month in all_months %}
+    {% for month in all_months|reverse %}
     <div class="monthly-container">
         <h2>{{ month }}</h2>
 
