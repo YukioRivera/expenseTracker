@@ -26,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for entry in expenses_by_month[month] %}
+                {% for entry in expenses_by_month[month] | reverse %}
                     <tr class="entry-row" data-entry-id="{{ entry.id }}">
                         <td>
                             <input type="date" class="entry-date" value="{{ entry.date_time.strftime('%Y-%m-%d') }}">
@@ -46,7 +46,7 @@
         {% endif %}
 
         <!-- Recurring Expenses Table -->
-        {% if recurring_expenses_by_month[month] %}
+        {% if recurring_expenses_by_month[month] | reverse %}
         <h3>Recurring Expenses</h3>
         <table class="expenses-table"> <!-- Changed class name here -->
             <thead>
