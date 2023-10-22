@@ -1,105 +1,204 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="container">
-    <h2>Expense History</h2>
+  <h2>Expense History</h2>
 
-    <!-- Tabs -->
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#expensesTab">Expenses</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#recurringExpensesTab">Recurring Expenses</a>
-        </li>
-    </ul>
+  <!-- Tabs -->
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link tab" data-toggle="tab" href="#expensesTab">Expenses</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link tab" data-toggle="tab" href="#recurringExpensesTab"
+        >Recurring Expenses</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link tab" data-toggle="tab" href="#incomeTab">Income</a>
+    </li>
+  </ul>
 
-    <!-- Tab Content -->
-    <div class="tab-content">
-        <!-- Expenses Tab Content -->
-        <div class="tab-pane container active" id="expensesTab">
-            {% for month in all_months|reverse %}
-            <div class="monthly-container">
-                <h2>{{ month }}</h2>
-                <button id="edit-entries-btn" class="edit-entry-btn" data-month="{{ month }}">Edit Entries</button>
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Expenses Tab Content -->
+    <div class="tab-pane container active" id="expensesTab">
+      {% for month in all_months|reverse %}
+      <div class="monthly-container">
+        <h2>{{ month }}</h2>
+        <button
+          id="edit-entries-btn"
+          class="edit-entry-btn"
+          data-month="{{ month }}"
+        >
+          Edit Entries
+        </button>
 
-                <!-- Expenses Table -->
-                {% if expenses_by_month[month] %}
-                <h3>Expenses</h3>
-                <table class="expenses-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Description</th>
-                            <th>Category</th>
-                            <th>Amount</th>
-                            <th></th> <!-- Placeholder for delete button header -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in expenses_by_month[month] | reverse %}
-                            <tr class="entry-row" data-entry-id="{{ entry.id }}">
-                                <td>
-                                    <input type="date" class="entry-date" value="{{ entry.date_time.strftime('%Y-%m-%d') }}">
-                                </td>                                             
-                                <td class="entry-description" contenteditable="false">{{ entry.description }}</td>
-                                <td class="entry-category" contenteditable="false">{{ entry.category }}</td>
-                                <td class="entry-amount" contenteditable="false">{{ entry.amount }}</td>
-                                <td class="delete-entry" style="display: none;">
-                                    <button class="delete-entry-btn">Delete</button>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% endif %}
-            </div>
+        <!-- Expenses Table -->
+        {% if expenses_by_month[month] %}
+        <h3>Expenses</h3>
+        <table class="expenses-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th></th>
+              <!-- Placeholder for delete button header -->
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in expenses_by_month[month] | reverse %}
+            <tr class="entry-row" data-entry-id="{{ entry.id }}">
+              <td>
+                <input
+                  type="date"
+                  class="entry-date"
+                  value="{{ entry.date_time.strftime('%Y-%m-%d') }}"
+                />
+              </td>
+              <td class="entry-description" contenteditable="false">
+                {{ entry.description }}
+              </td>
+              <td class="entry-category" contenteditable="false">
+                {{ entry.category }}
+              </td>
+              <td class="entry-amount" contenteditable="false">
+                {{ entry.amount }}
+              </td>
+              <td class="delete-entry" style="display: none">
+                <button class="delete-entry-btn">Delete</button>
+              </td>
+            </tr>
             {% endfor %}
-        </div>
-
-        <!-- Recurring Expenses Tab Content -->
-        <div class="tab-pane container fade" id="recurringExpensesTab">
-            {% for month in all_months|reverse %}
-            <div class="monthly-container">
-                <h2>{{ month }}</h2>
-                <button id="edit-entries-btn" class="edit-entry-btn" data-month="{{ month }}">Edit Entries</button>
-
-                <!-- Recurring Expenses Table -->
-                {% if recurring_expenses_by_month[month] %}
-                <h3>Recurring Expenses</h3>
-                <table class="expenses-table">
-                    <thead>
-                        <tr>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Category</th>
-                            <th>Amount</th>
-                            <th></th> <!-- Placeholder for delete button header -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in recurring_expenses_by_month[month] %}
-                            <tr class="recurring-entry-row entry-row" data-entry-id="{{ entry.id }}">
-                                <td>
-                                    <input type="date" class="entry-date" value="{{ entry.start_date.strftime('%Y-%m-%d') }}">
-                                </td>
-                                <td>
-                                    <input type="date" class="entry-end-date" value="{{ entry.end_date.strftime('%Y-%m-%d') if entry.end_date else '' }}">
-                                </td>                        
-                                <td class="entry-category" contenteditable="false">{{ entry.category }}</td>
-                                <td class="entry-amount" contenteditable="false">{{ entry.amount }}</td>
-                                <td class="delete-entry" style="display: none;">
-                                    <button class="delete-entry-btn">Delete</button>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+      {% endfor %}
     </div>
+
+    <!-- Recurring Expenses Tab Content -->
+    <div class="tab-pane container fade" id="recurringExpensesTab">
+      {% for month in all_months|reverse %}
+      <div class="monthly-container">
+        <h2>{{ month }}</h2>
+        <button
+          id="edit-entries-btn"
+          class="edit-entry-btn"
+          data-month="{{ month }}"
+        >
+          Edit Entries
+        </button>
+
+        <!-- Recurring Expenses Table -->
+        {% if recurring_expenses_by_month[month] %}
+        <h3>Recurring Expenses</h3>
+        <table class="expenses-table">
+          <thead>
+            <tr>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th></th>
+              <!-- Placeholder for delete button header -->
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in recurring_expenses_by_month[month] %}
+            <tr
+              class="recurring-entry-row entry-row"
+              data-entry-id="{{ entry.id }}"
+            >
+              <td>
+                <input
+                  type="date"
+                  class="entry-date"
+                  value="{{ entry.start_date.strftime('%Y-%m-%d') }}"
+                />
+              </td>
+              <td>
+                <input
+                  type="date"
+                  class="entry-end-date"
+                  value="{{ entry.end_date.strftime('%Y-%m-%d') if entry.end_date else '' }}"
+                />
+              </td>
+              <td class="entry-category" contenteditable="false">
+                {{ entry.category }}
+              </td>
+              <td class="entry-amount" contenteditable="false">
+                {{ entry.amount }}
+              </td>
+              <td class="delete-entry" style="display: none">
+                <button class="delete-entry-btn">Delete</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Add this new content pane after the "Income Tab Content" -->
+    <div class="tab-pane container fade" id="incomeTab">
+      {% for month in all_months|reverse %}
+      <div class="monthly-container">
+        <h2>{{ month }}</h2>
+        <button
+          id="edit-entries-btn"
+          class="edit-entry-btn"
+          data-month="{{ month }}"
+        >
+          Edit Entries
+        </button>
+
+        <!-- Income Table -->
+        {% if incomes_by_month[month] %}
+        <h3>Income</h3>
+        <table class="income-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Source</th>
+              <th>Amount</th>
+              <th></th>
+              <!-- Placeholder for edit button header -->
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in incomes_by_month[month] | reverse %}
+            <tr
+              class="income-entry-row entry-row"
+              data-entry-id="{{ entry.id }}"
+            >
+              <td>
+                <input
+                  type="date"
+                  class="entry-date"
+                  value="{{ entry.income_date.strftime('%Y-%m-%d') }}"
+                />
+              </td>
+              <td class="entry-source" contenteditable="false">
+                {{ entry.source }}
+              </td>
+              <td class="entry-amount" contenteditable="false">
+                {{ entry.amount }}
+              </td>
+              <td class="delete-entry" style="display: none">
+                <button class="edit-entry-btn">Delete</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
 {% endblock %}

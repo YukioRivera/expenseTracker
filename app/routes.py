@@ -136,9 +136,6 @@ def home():
         current_date=current_date
     )
 
-
-
-
 @main.route('/expense_history', methods=['GET'])
 @login_required
 def expense_history():
@@ -172,9 +169,18 @@ def expense_history():
             # Move to the first day of the next month
             current_date += timedelta(days=32)
             current_date = current_date.replace(day=1)
+
+    # Fetch all incomes for the current user
+    all_incomes = Income.query.filter_by(user_id=current_user.id).order_by(Income.income_date).all()
+
+    # Organize incomes by month
+    incomes_by_month = defaultdict(list)
+    for income in all_incomes:
+        month_year_key = income.income_date.strftime('%B %Y')  # e.g., "September 2023"
+        incomes_by_month[month_year_key].append(income)
     
-    # Get all unique months from both expenses and recurring expenses
-    all_months = set(expenses_by_month.keys()) | set(recurring_expenses_by_month.keys())
+    # Get all unique months from expenses, recurring expenses, and incomes
+    all_months = set(expenses_by_month.keys()) | set(recurring_expenses_by_month.keys()) | set(incomes_by_month.keys())
     
     # Sort the months chronologically
     all_months = sorted(list(all_months), key=lambda x: datetime.strptime(x, '%B %Y'))
@@ -183,8 +189,10 @@ def expense_history():
         'expense_history.html', 
         expenses_by_month=expenses_by_month,
         recurring_expenses_by_month=recurring_expenses_by_month,
+        incomes_by_month=incomes_by_month,  # Pass the organized income data to the template
         all_months=all_months  # Pass the sorted list of all months to the template
     )
+
 
 @main.route('/submit', methods=['POST'])
 @login_required
@@ -389,3 +397,36 @@ def add_income():
 
     # Redirect to a success page or back to the form, or wherever you'd like
     return redirect(url_for('main.home'))  # Redirect to the main.home route for consistency
+
+@main.route('/update-income-entries', methods=['POST'])
+@login_required
+def update_income_entries():
+    data = request.get_json()
+    entries = data.get('entries', [])
+    
+    for entry_data in entries:
+        logging.debug(entry_data)
+        income_id = entry_data['id']
+        source = entry_data['source']
+        amount = entry_data['amount']
+        income_date_str = entry_data['date']
+        # income_date_str = entry_data.get('income_date', None)
+        # recurrence_type = entry_data['recurrence_type']
+
+        # Convert the income_date string to a date object
+        income_date = datetime.strptime(income_date_str, '%Y-%m-%d').date()
+
+        # Fetch the income entry from the database
+        income_entry = Income.query.get(income_id)
+        if income_entry:
+            income_entry.source = source
+            income_entry.amount = float(amount)
+            income_entry.income_date = income_date
+            # income_entry.recurrence_type = recurrence_type
+
+    try:
+        db.session.commit()
+        return jsonify(success=True)
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(success=False, message=str(e))

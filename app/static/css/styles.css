@@ -231,3 +231,74 @@ body {
 .positive {
     color: green;  /* or any other color that indicates a positive value */
 }
+
+/* Unified Form Styles for Expenses, Recurring Expenses, and Income */
+.data-entry-form .input-group,
+.recurring-charges-form .input-group,
+.income-form .input-group {
+    margin-bottom: 20px; /* Increased margin */
+}
+
+.data-entry-form input,
+.data-entry-form select,
+.recurring-charges-form input,
+.recurring-charges-form select,
+.income-form input,
+.income-form select {
+    padding: 8px; /* Increased padding */
+    margin: 8px 0; /* Increased margin */
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px; /* Rounded corners */
+    font-size: 14px; /* Increased font size */
+}
+
+.data-entry-form button,
+.recurring-charges-form button,
+.income-form button {
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    padding: 14px 26px; /* Increased padding */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; /* Increased font size */
+    margin: 6px 2px;
+    cursor: pointer;
+    border-radius: 10px; /* More rounded corners */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Added transform transition */
+}
+
+.data-entry-form button:hover,
+.recurring-charges-form button:hover,
+.income-form button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Scale effect on hover */
+}
+
+/* Income Table Styles (similar to Expenses Table) */
+.income-table {
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.income-table thead {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.income-table th,
+.income-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.income-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.income-table tfoot {
+    font-weight: bold;
+}
