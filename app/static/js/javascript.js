@@ -1,9 +1,32 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Attach click event listeners to tabs to save the active tab's ID to localStorage
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            localStorage.setItem('activeTab', tab.id);
+        });
+    });
+
     // Check if the current page is the history.html page
     if (document.querySelector('.monthly-container')) {
         initExpenseHistory();
     }
+
+    // Retrieve the active tab from localStorage and activate it
+    const activeTabId = localStorage.getItem('activeTab');
+    if (activeTabId) {
+        const activeTab = document.getElementById(activeTabId);
+        if (activeTab) {
+            activeTab.click(); // This simulates a click on the tab, activating it.
+        }
+    }
+
     // Add more initializations for other pages as needed
+});
+
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        localStorage.setItem('activeTab', tab.id);
+    });
 });
 
 function initExpenseHistory() {
@@ -14,6 +37,22 @@ function initExpenseHistory() {
             
             // Toggle the editable fields and buttons
             toggleEdit(container);
+
+            const { regularEntries, recurringEntries, incomeEntries } = collectEditedEntries();
+            console.log("this is to check income entries 1 "  + incomeEntries)
+            
+            if (regularEntries.length > 0) {
+                updateEntries(regularEntries);
+            }
+
+            if (recurringEntries.length > 0) {
+                updateRecurringEntries(recurringEntries);
+            }
+
+            if (incomeEntries.length > 0) {
+                console.log("this is to check income entries 2 "  + incomeEntries)
+                updateIncomeEntries(incomeEntries);
+            }
         });
     });
 
@@ -38,31 +77,46 @@ function initExpenseHistory() {
             row.classList.add('edited-recurring-entry-row');
         });
     });
-
 }
 
+
 function toggleEdit(container) {
+    // Determine the type of tab we're in
+    const isInExpensesTab = container.querySelector('.expenses-table') !== null;
+    const isInIncomeTab = container.querySelector('.income-table') !== null;
+
+    // Get all rows inside the current container
     const rows = container.querySelectorAll('.entry-row');
     const isEditing = container.getAttribute('data-is-editing') === 'true';
     
+    // Update the data-is-editing attribute first
+    container.setAttribute('data-is-editing', isEditing ? "false" : "true");
+    
     // Toggle contenteditable attribute for each entry
     rows.forEach(row => {
-        row.querySelectorAll('td:not(.delete-entry)').forEach(cell => {
+        row.querySelectorAll('td:not(.delete-entry):not(.edit-entry)').forEach(cell => {
             cell.setAttribute('contenteditable', isEditing ? "false" : "true");
         });
         
         // Show/hide delete button for each row
         const deleteButton = row.querySelector('.delete-entry');
-        deleteButton.style.display = isEditing ? 'none' : 'table-cell';
+        if (deleteButton) {
+            deleteButton.style.display = isEditing ? 'none' : 'table-cell';
+        }
+
+        // Show/hide edit button for each row (specifically for Income)
+        const editButton = row.querySelector('.edit-entry');
+        if (editButton) {
+            editButton.style.display = isEditing ? 'none' : 'table-cell';
+        }
     });
     
     // Toggle button text
     const editButton = container.querySelector('.edit-entry-btn');
     editButton.textContent = isEditing ? 'Edit Entries' : 'Apply';
-    
-    // Update the data-is-editing attribute
-    container.setAttribute('data-is-editing', isEditing ? "false" : "true");
 }
+
+
 
 function handleRemoveEntry(row, isRecurring) {
     const entryId = row.getAttribute('data-entry-id');
@@ -94,23 +148,31 @@ function collectEditedEntries() {
     const editedEntryRows = document.querySelectorAll('.edited-entry-row');
     const regularEntries = [];
     const recurringEntries = [];
+    const incomeEntries = [];
 
     Array.from(editedEntryRows).forEach(row => {
         if (row.classList.contains('recurring-entry-row')) {
             // Handle recurring expenses
             recurringEntries.push({
                 id: row.dataset.entryId,
-                startDate: row.querySelector('.entry-date').value,  // Changed to .value
-                // endDate: row.querySelector('.entry-end-date').value,  // Changed to .value
-                endDate: row.querySelector('.entry-end-date').value || null,  // Use the ternary operation here
+                startDate: row.querySelector('.entry-date').value,
+                endDate: row.querySelector('.entry-end-date').value || null,
                 category: row.querySelector('.entry-category').textContent,
+                amount: row.querySelector('.entry-amount').textContent
+            });
+        } else if (row.closest('.income-table')) {
+            // Handle income
+            incomeEntries.push({
+                id: row.dataset.entryId,
+                date: row.querySelector('.entry-date').value,
+                source: row.querySelector('.entry-source').textContent,
                 amount: row.querySelector('.entry-amount').textContent
             });
         } else {
             // Handle regular expenses
             regularEntries.push({
                 id: row.dataset.entryId,
-                date: row.querySelector('.entry-date').value,  // Changed to .value
+                date: row.querySelector('.entry-date').value,
                 description: row.querySelector('.entry-description').textContent,
                 category: row.querySelector('.entry-category').textContent,
                 amount: row.querySelector('.entry-amount').textContent
@@ -120,31 +182,14 @@ function collectEditedEntries() {
 
     console.log("Regular Entries:", regularEntries);
     console.log("Recurring Entries:", recurringEntries);
+    console.log("Income Entries:", incomeEntries);
 
     return {
         regularEntries: regularEntries,
-        recurringEntries: recurringEntries
+        recurringEntries: recurringEntries,
+        incomeEntries: incomeEntries
     };
 }
-
-
-// Select all buttons with the class .edit-entry-btn
-const editButtons = document.querySelectorAll('.edit-entry-btn');
-
-// Attach the event listener to each button
-editButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        const { regularEntries, recurringEntries } = collectEditedEntries();
-        
-        if (regularEntries.length > 0) {
-            updateEntries(regularEntries);
-        }
-
-        if (recurringEntries.length > 0) {
-            updateRecurringEntries(recurringEntries);
-        }
-    });
-});
 
 function updateEntries(entries) {
     fetch('/update-entries', {
@@ -195,17 +240,36 @@ function updateRecurringEntries(entries) {
     });
 }
 
-
-function openForm(formName) {
-    var i, formContent, tablinks;
-    formContent = document.getElementsByClassName("form-content");
-    for (i = 0; i < formContent.length; i++) {
-        formContent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active");
-    }
-    document.getElementById(formName).style.display = "block";
-    event.currentTarget.classList.add("active");
+function updateIncomeEntries(entries) {
+    fetch('/update-income-entries', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ entries: entries }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Income entries updated successfully');
+        } else {
+            console.error('Error updating income entries:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
+
+$(document).ready(function() {
+    // Check for the saved tab in sessionStorage and activate it
+    var activeTab = sessionStorage.getItem('activeTab');
+    if (activeTab) {
+        $('.nav-tabs a[href="' + activeTab + '"]').tab('show');
+    }
+
+    // Save the current tab to sessionStorage when clicked
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        sessionStorage.setItem('activeTab', $(e.target).attr('href'));
+    });
+});
