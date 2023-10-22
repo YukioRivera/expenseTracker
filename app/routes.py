@@ -200,7 +200,13 @@ def submit():
     amount = float(request.form.get('amount'))
     category = request.form.get('category').lower() # Convert the category to lowercase
     description = request.form.get('description').lower()  # Convert the description to lowercase
-    date_time = datetime.now()
+    
+    # Capture the date from the form
+    entry_date_str = request.form.get('entry_date')
+    if entry_date_str:
+        date_time = datetime.strptime(entry_date_str, '%Y-%m-%d')
+    else:
+        date_time = datetime.now()
 
     # Insert data into the database
     expense = Expense(amount=amount, category=category, date_time=date_time, description=description)  # Set the description attribute
