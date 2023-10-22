@@ -1,6 +1,8 @@
 from datetime import datetime, date
 from app import db
 from flask_login import UserMixin
+from flask_wtf import FlaskForm
+from wtforms import SelectField
 
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -10,7 +12,7 @@ class Expense(db.Model):
     date_time = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"<Expense {self.id} - {self.amount} - {self.category} - {self.date_time}>"
+        return f"<Expense {self.id} - {self.amount} - {self.category} - {self.description} - {self.date_time}>"
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -27,3 +29,12 @@ class RecurringCharge(db.Model):
     end_date = db.Column(db.Date, nullable=True)
     day_of_month = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+    
+class Income(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    source = db.Column(db.String(100), nullable=True)  # Source of the income
+    amount = db.Column(db.Float, nullable=False)
+    income_date = db.Column(db.Date, nullable=False, default=date.today())
+    recurrence_type = db.Column(db.String(50), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Linking income to a user
