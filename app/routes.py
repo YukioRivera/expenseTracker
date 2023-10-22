@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, Flask
 from datetime import datetime, timedelta, date
-from app.models import Expense, User, RecurringCharge
+from app.models import Expense, User, RecurringCharge, Income
 from app import db, login_manager
 from collections import defaultdict
 from flask import jsonify
@@ -54,6 +54,9 @@ def home():
     
     # Query the RecurringCharge table
     recurring_charges = RecurringCharge.query.filter_by(user_id=current_user.id).all()
+    
+    # Query total income for the month
+    incomes = Income.query.filter(db.extract('year', Income.income_date) == year, db.extract('month', Income.income_date) == month).all()
 
     # Step 1: Create a Unified Data Structure
     unified_data = []
@@ -62,6 +65,14 @@ def home():
             'category': expense.category.strip(),
             'amount': expense.amount,
             'type': 'Expense'
+        })
+        
+    # Integrate income data into unified data structure
+    for income in incomes:
+        unified_data.append({
+            'category': income.source.strip() if income.source else "Unknown Source",
+            'amount': income.amount,
+            'type': 'Income'
         })
 
     # Get the first and last day of the desired month
@@ -97,10 +108,12 @@ def home():
         'type': ', '.join(data['type'])
     } for category, data in aggregated_data.items()]
 
-    # Step 3: Calculate Percentages
-    grand_total = sum(item['amount'] for item in aggregated_data_list)
+    # Step 3: Calculate Percentages and Totals
+    grand_total = sum(item['amount'] for item in aggregated_data_list if item['type'] != 'Income')
+    total_income = sum(item.amount for item in incomes)
+    net_income = total_income - grand_total
     for item in aggregated_data_list:
-        item['percentage_of_total'] = round((item['amount'] / grand_total) * 100, 2)
+        item['percentage_of_total'] = round((item['amount'] / grand_total) * 100, 2) if grand_total != 0 else 0
 
     # Step 4: Sort the Data
     sorted_data = sorted(aggregated_data_list, key=lambda x: x['category'])
@@ -117,9 +130,13 @@ def home():
         'index.html',
         data=sorted_data,
         grand_total=grand_total,
+        total_income=total_income,  # Pass the total_income to the template
+        net_income=net_income,      # Pass the net_income to the template
         desired_date=desired_date,
-        current_date=current_date  # Pass the current_date to the template
+        current_date=current_date
     )
+
+
 
 
 @main.route('/expense_history', methods=['GET'])
@@ -340,3 +357,35 @@ def update_recurring_entries():
         db.session.rollback()
         return jsonify(success=False, message=str(e))
 
+@main.route('/add-income', methods=['POST'])
+@login_required
+def add_income():
+    # Extract data from the form
+    source = request.form.get('source')
+    amount = float(request.form.get('amount'))
+    income_date_str = request.form.get('income_date')
+    recurrence_type = request.form.get('recurrence_type')
+
+    # Convert the income_date string to a date object
+    income_date = datetime.strptime(income_date_str, '%Y-%m-%d').date()
+
+    # Create a new Income instance
+    new_income = Income(
+        source=source,
+        amount=amount,
+        income_date=income_date,
+        recurrence_type=recurrence_type,
+        user_id=current_user.id  # Assuming you have a logged-in user with an 'id' attribute
+    )
+
+    # Add to the database and commit
+    try:
+        db.session.add(new_income)
+        db.session.commit()
+        flash('Income added successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error: {e}', 'danger')
+
+    # Redirect to a success page or back to the form, or wherever you'd like
+    return redirect(url_for('main.home'))  # Redirect to the main.home route for consistency

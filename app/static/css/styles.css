@@ -223,3 +223,11 @@ body {
         padding: 8px 15px;
     }
 }
+
+.negative {
+    color: red;
+}
+
+.positive {
+    color: green;  /* or any other color that indicates a positive value */
+}

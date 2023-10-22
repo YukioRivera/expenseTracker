@@ -13,6 +13,9 @@
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#recurringEntry">Add Recurring Charge</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#incomeEntry">Add Income</a>
+                </li>
             </ul>
 
             <!-- Tab Content -->
@@ -71,6 +74,36 @@
                         </div>
                     </form>
                 </div>
+
+                <!-- Income Entry Form -->
+                <div class="tab-pane container fade" id="incomeEntry">
+                    <form action="/add-income" method="post" class="data-entry-form">
+                        <div class="input-group">
+                            <label for="income-amount">Amount:</label>
+                            <input type="number" name="amount" id="income-amount" required placeholder="Enter amount">
+                        </div>
+                        <div class="input-group">
+                            <label for="income-category">Source:</label>
+                            <input type="text" name="source" id="income-source" required placeholder="Enter Source">
+                        </div>
+                        <div class="input-group">
+                            <label for="income-date">Income Date:</label>
+                            <input type="date" name="income_date" id="income-date" required value="{{ current_date }}">
+                        </div>
+                        <div class="input-group">
+                            <label for="recurrence_type">Recurrence Type:</label>
+                            <select name="recurrence_type" id="recurrence_type" required>
+                                <option value="One-time">One-time</option>
+                                <option value="Bi-weekly">Bi-weekly</option>
+                                <option value="Monthly">Monthly</option>
+                                <!-- Add more options if needed -->
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <button type="submit" class="btn-expense-insights">Add Income</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </section>
 
@@ -118,7 +151,17 @@
                         <td colspan="3">Total for the Month:</td>
                         <td>{{ grand_total }}</td>
                     </tr>
+                    <tr>
+                        <td colspan="3">Total Income for the Month:</td>
+                        <td>{{ total_income }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Net Income (Income - Expenses):</td>
+                        <td class="{{ 'negative' if net_income < 0 else 'positive' }}">{{ net_income }}</td>
+                    </tr>                    
+        
                 </tfoot>
+
             </table>
         </section>
 
