@@ -20,7 +20,7 @@
 <div class="tab-content">
   <!-- Expenses Tab Content -->
   <div class="tab-pane container active" id="expensesTab">
-    {% for month in all_months|reverse %}
+    {% for month in all_months %}
     <div class="monthly-container">
       <h2>{{ month }}</h2>
       <button
@@ -46,7 +46,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for entry in expenses_by_month[month] | reverse %}
+          {% for entry in expenses_by_month[month] %}
           <tr class="entry-row" data-entry-id="{{ entry.id }}">
             <td>
               <input
@@ -78,7 +78,7 @@
 
   <!-- Recurring Expenses Tab Content -->
   <div class="tab-pane container fade" id="recurringExpensesTab">
-    {% for month in all_months|reverse %}
+    {% for month in all_months %}
     <div class="monthly-container">
       <h2>{{ month }}</h2>
       <button
@@ -143,7 +143,7 @@
 
   <!-- Add this new content pane after the "Income Tab Content" -->
   <div class="tab-pane container fade" id="incomeTab">
-    {% for month in all_months|reverse %}
+    {% for month in all_months %}
     <div class="monthly-container">
       <h2>{{ month }}</h2>
       <button
@@ -168,7 +168,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for entry in incomes_by_month[month] | reverse %}
+          {% for entry in incomes_by_month[month] %}
           <tr class="income-entry-row entry-row" data-entry-id="{{ entry.id }}">
             <td>
               <input
