@@ -67,13 +67,13 @@ def home():
             'type': 'Expense'
         })
         
-    # Integrate income data into unified data structure
-    for income in incomes:
-        unified_data.append({
-            'category': income.source.strip() if income.source else "Unknown Source",
-            'amount': income.amount,
-            'type': 'Income'
-        })
+    # # Integrate income data into unified data structure
+    # for income in incomes:
+    #     unified_data.append({
+    #         'category': income.source.strip() if income.source else "Unknown Source",
+    #         'amount': income.amount,
+    #         'type': 'Income'
+    #     })
 
     # Get the first and last day of the desired month
     first_day_of_month = datetime(year, month, 1).date()  # Convert to datetime.date object
@@ -101,12 +101,20 @@ def home():
         aggregated_data[item['category']]['amount'] += item['amount']
         aggregated_data[item['category']]['type'].add(item['type'])
 
+    # # Convert the aggregated data to a list of dictionaries
+    # aggregated_data_list = [{
+    #     'category': category,
+    #     'amount': data['amount'],
+    #     'type': ', '.join(data['type'])
+    # } for category, data in aggregated_data.items()]
+    
     # Convert the aggregated data to a list of dictionaries
     aggregated_data_list = [{
         'category': category,
         'amount': data['amount'],
         'type': ', '.join(data['type'])
-    } for category, data in aggregated_data.items()]
+    } for category, data in aggregated_data.items() if 'Income' not in data['type']]
+
 
     # Step 3: Calculate Percentages and Totals
     grand_total = sum(item['amount'] for item in aggregated_data_list if item['type'] != 'Income')
