@@ -140,7 +140,8 @@ def home():
 @login_required
 def expense_history():
     # Fetch all expenses
-    all_expenses = Expense.query.order_by(Expense.date_time).all()
+    # all_expenses = Expense.query.order_by(Expense.date_time).all()
+    all_expenses = Expense.query.order_by(Expense.date_time.desc()).all()
     
     # Query the RecurringCharge table
     recurring_charges = RecurringCharge.query.filter_by(user_id=current_user.id).all()
@@ -171,7 +172,9 @@ def expense_history():
             current_date = current_date.replace(day=1)
 
     # Fetch all incomes for the current user
-    all_incomes = Income.query.filter_by(user_id=current_user.id).order_by(Income.income_date).all()
+    # all_incomes = Income.query.filter_by(user_id=current_user.id).order_by(Income.income_date).all()
+    all_incomes = Income.query.filter_by(user_id=current_user.id).order_by(Income.income_date.desc()).all()
+
 
     # Organize incomes by month
     incomes_by_month = defaultdict(list)
@@ -183,7 +186,7 @@ def expense_history():
     all_months = set(expenses_by_month.keys()) | set(recurring_expenses_by_month.keys()) | set(incomes_by_month.keys())
     
     # Sort the months chronologically
-    all_months = sorted(list(all_months), key=lambda x: datetime.strptime(x, '%B %Y'))
+    all_months = sorted(list(all_months), key=lambda x: datetime.strptime(x, '%B %Y'), reverse=True)
 
     return render_template(
         'expense_history.html', 
