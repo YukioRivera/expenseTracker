@@ -273,3 +273,66 @@ $(document).ready(function() {
         sessionStorage.setItem('activeTab', $(e.target).attr('href'));
     });
 });
+
+// Sorting function for the monthly breakdown table 
+document.querySelectorAll('.sort-arrow').forEach(arrow => {
+    arrow.addEventListener('click', function() {
+        const sortType = arrow.getAttribute('data-sort');
+        sortTable(sortType);
+    });
+});
+
+function sortTable(sortType) {
+    // Get the table rows
+    const rows = document.querySelectorAll('.expenses-table tbody tr');
+    const sortedRows = Array.from(rows).sort((a, b) => {
+        let cellA, cellB, order;
+        switch (sortType) {
+            case 'type-asc':
+                cellA = a.querySelector('td:nth-child(1)').textContent;
+                cellB = b.querySelector('td:nth-child(1)').textContent;
+                order = cellA.localeCompare(cellB);
+                break;
+            case 'type-desc':
+                cellA = a.querySelector('td:nth-child(1)').textContent;
+                cellB = b.querySelector('td:nth-child(1)').textContent;
+                order = cellB.localeCompare(cellA);
+                break;
+            case 'category-asc':
+                cellA = a.querySelector('td:nth-child(2)').textContent;
+                cellB = b.querySelector('td:nth-child(2)').textContent;
+                order = cellA.localeCompare(cellB);
+                break;
+            case 'category-desc':
+                cellA = a.querySelector('td:nth-child(2)').textContent;
+                cellB = b.querySelector('td:nth-child(2)').textContent;
+                order = cellB.localeCompare(cellA);
+                break;
+            case 'amount-asc':
+                cellA = parseFloat(a.querySelector('td:nth-child(3)').textContent);
+                cellB = parseFloat(b.querySelector('td:nth-child(3)').textContent);
+                order = cellA - cellB;
+                break;
+            case 'amount-desc':
+                cellA = parseFloat(a.querySelector('td:nth-child(3)').textContent);
+                cellB = parseFloat(b.querySelector('td:nth-child(3)').textContent);
+                order = cellB - cellA;
+                break;
+            case 'percentage-asc':
+                cellA = parseFloat(a.querySelector('td:nth-child(4)').textContent);
+                cellB = parseFloat(b.querySelector('td:nth-child(4)').textContent);
+                order = cellA - cellB;
+                break;
+            case 'percentage-desc':
+                cellA = parseFloat(a.querySelector('td:nth-child(4)').textContent);
+                cellB = parseFloat(b.querySelector('td:nth-child(4)').textContent);
+                order = cellB - cellA;
+                break;
+        }
+        return order;
+    });
+
+    // Append sorted rows to the table
+    const tbody = document.querySelector('.expenses-table tbody');
+    sortedRows.forEach(row => tbody.appendChild(row));
+}

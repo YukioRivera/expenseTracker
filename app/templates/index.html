@@ -4,19 +4,13 @@
   <!-- Tabs -->
   <ul class="nav nav-tabs">
     <li class="nav-item">
-      <a class="nav-link active tab" data-toggle="tab" href="#dataEntry"
-        >Add Expense</a
-      >
+      <a class="nav-link active tab" data-toggle="tab" href="#dataEntry">Add Expense</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link tab" data-toggle="tab" href="#recurringEntry"
-        >Add Recurring Charge</a
-      >
+      <a class="nav-link tab" data-toggle="tab" href="#recurringEntry">Add Recurring Charge</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link tab" data-toggle="tab" href="#incomeEntry"
-        >Add Income</a
-      >
+      <a class="nav-link tab" data-toggle="tab" href="#incomeEntry">Add Income</a>
     </li>
   </ul>
 
@@ -27,42 +21,20 @@
       <form action="/submit" method="post" class="data-entry-form">
         <div class="input-group">
           <label for="amount">Amount:</label>
-          <input
-            type="number"
-            name="amount"
-            id="amount"
-            required
-            placeholder="Enter amount"
-          />
+          <input type="number" name="amount" id="amount" required placeholder="Enter amount" />
         </div>
         <div class="input-group">
           <label for="category">Category:</label>
-          <input
-            type="text"
-            name="category"
-            id="category"
-            required
-            placeholder="Enter category"
-          />
+          <input type="text" name="category" id="category" required placeholder="Enter category" />
         </div>
         <div class="input-group">
           <label for="description">Description:</label>
-          <input
-            type="text"
-            name="description"
-            id="description"
-            placeholder="Enter description"
-          />
+          <input type="text" name="description" id="description" placeholder="Enter description" />
         </div>
         <!-- Calendar Input for Date Selection -->
         <div class="input-group">
           <label for="entry_date">Date:</label>
-          <input
-            type="date"
-            id="entry_date"
-            name="entry_date"
-            value="{{ current_date }}"
-          />
+          <input type="date" id="entry_date" name="entry_date" value="{{ current_date }}" />
         </div>
         <div class="input-group">
           <button type="submit" class="btn-expense-insights">
@@ -77,23 +49,11 @@
       <form action="/add-recurring" method="post" class="data-entry-form">
         <div class="input-group">
           <label for="recurring-amount">Amount:</label>
-          <input
-            type="number"
-            name="amount"
-            id="recurring-amount"
-            required
-            placeholder="Enter amount"
-          />
+          <input type="number" name="amount" id="recurring-amount" required placeholder="Enter amount" />
         </div>
         <div class="input-group">
           <label for="recurring-category">Category:</label>
-          <input
-            type="text"
-            name="category"
-            id="recurring-category"
-            required
-            placeholder="Enter category"
-          />
+          <input type="text" name="category" id="recurring-category" required placeholder="Enter category" />
         </div>
         <div class="input-group">
           <label for="start-date">Start Date:</label>
@@ -105,14 +65,7 @@
         </div>
         <div class="input-group">
           <label for="day-of-month">Day of Month:</label>
-          <input
-            type="number"
-            name="day_of_month"
-            id="day-of-month"
-            min="1"
-            max="31"
-            required
-          />
+          <input type="number" name="day_of_month" id="day-of-month" min="1" max="31" required />
         </div>
         <div class="input-group">
           <button type="submit" class="btn-expense-insights">
@@ -127,33 +80,15 @@
       <form action="/add-income" method="post" class="data-entry-form">
         <div class="input-group">
           <label for="income-amount">Amount:</label>
-          <input
-            type="number"
-            name="amount"
-            id="income-amount"
-            required
-            placeholder="Enter amount"
-          />
+          <input type="number" name="amount" id="income-amount" required placeholder="Enter amount" />
         </div>
         <div class="input-group">
           <label for="income-category">Source:</label>
-          <input
-            type="text"
-            name="source"
-            id="income-source"
-            required
-            placeholder="Enter Source"
-          />
+          <input type="text" name="source" id="income-source" required placeholder="Enter Source" />
         </div>
         <div class="input-group">
           <label for="income-date">Income Date:</label>
-          <input
-            type="date"
-            name="income_date"
-            id="income-date"
-            required
-            value="{{ current_date }}"
-          />
+          <input type="date" name="income_date" id="income-date" required value="{{ current_date }}" />
         </div>
         <div class="input-group">
           <label for="recurrence_type">Recurrence Type:</label>
@@ -176,13 +111,7 @@
 <section class="month-selection">
   <form action="/" method="get" class="month-dropdown">
     <label for="date">Select Month and Year:</label>
-    <input
-      type="month"
-      name="date"
-      id="date"
-      value="{{ desired_date }}"
-      onchange="this.form.submit()"
-    />
+    <input type="month" name="date" id="date" value="{{ desired_date }}" onchange="this.form.submit()" />
   </form>
 </section>
 
@@ -194,10 +123,27 @@
   <table class="expenses-table">
     <thead>
       <tr>
-        <th>Type</th>
+        <!-- <th>Type</th>
         <th>Category</th>
         <th>Amount</th>
-        <th>Percentage of Total</th>
+        <th>Percentage of Total</th> -->
+        <th>Type
+          <span class="sort-arrow" data-sort="type-asc">⬆</span>
+          <span class="sort-arrow" data-sort="type-desc">⬇</span>
+        </th>
+        <th>Category
+          <span class="sort-arrow" data-sort="category-asc">⬆</span>
+          <span class="sort-arrow" data-sort="category-desc">⬇</span>
+        </th>
+        <th>Amount
+          <span class="sort-arrow" data-sort="amount-asc">⬆</span>
+          <span class="sort-arrow" data-sort="amount-desc">⬇</span>
+        </th>
+        <th>Percentage of Total
+          <span class="sort-arrow" data-sort="percentage-asc">⬆</span>
+          <span class="sort-arrow" data-sort="percentage-desc">⬇</span>
+        </th>
+
       </tr>
     </thead>
     <tbody>
@@ -235,8 +181,6 @@
 
 <!-- Expense Insights Link -->
 <section class="expense-insights-link">
-  <a href="{{ url_for('main.expense_history') }}" class="btn-expense-insights"
-    >Expense History</a
-  >
+  <a href="{{ url_for('main.expense_history') }}" class="btn-expense-insights">Expense History</a>
 </section>
 {% endblock %}
