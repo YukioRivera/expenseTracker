@@ -302,3 +302,9 @@ body {
 .income-table tfoot {
     font-weight: bold;
 }
+
+/* Monthly breakdown arrows */
+.sort-arrow {
+    cursor: pointer;
+    padding-left: 5px;
+}
