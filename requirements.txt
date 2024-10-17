@@ -1,7 +1,3 @@
-PyPDF2
-pdfminer.six
-pytesseract
-opencv-python
 pandas
 matplotlib
 seaborn
