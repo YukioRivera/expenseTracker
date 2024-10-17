@@ -83,15 +83,45 @@ def showCategories(conn):
     # plt.show()  # Uncomment to display the plot
     
     # ------------------------ code for pie charts ------------------------
-    plt.figure(figsize=(20,10)) # increase size of chart 
+    totalAmount_Categories = df_categories_woEducation.sum()
+    category_percents = df_categories_woEducation/totalAmount_Categories
+    print(f"total amount: {totalAmount_Categories}")
+    print(category_percents.iloc[0])
+    
+    plt.figure(figsize=(10,5)) # increase size of chart 
     
     # create the axes object 
-    ax = df_categories_woEducation.plot(kind='pie')
+    fig, ax = plt.subplots()
     
-    # plot characteristics 
+    # Hide axes
+    ax.xaxis.set_visible(False) 
+    ax.yaxis.set_visible(False)
+    ax.set_frame_on(False)
     
-    
-    plt.savefig('graphs/Category/Pie_CategoryExpenses_woEdu.png') 
-    
+    # prepare table
+    category_names = df_categories_woEducation.index.tolist()
+    category_values = df_categories_woEducation.values.flatten().tolist()
 
+    # create table content with category and amount as columns  
+    table_data = [[cat, amnt] for cat, amnt in zip(category_names, category_values)]
+    
+    # add total row 
+    table_data.append(["Total: ", totalAmount_Categories])
+    
+    # create table
+    table = ax.table(cellText=table_data, 
+                     colLabels=["Category", "Amount"],
+                     cellLoc='center',
+                     loc='center')
+    
+    # Adjust layout and font size
+    table.auto_set_font_size(False)
+    table.set_fontsize(14)
+
+    # Make the table dynamic and adjust size based on text
+    # table.auto_set_column_width(col=list(range(len(category_percents.columns))))
+    
+    plt.savefig('graphs/Category/Pie_CategoryExpenses_woEdu.png', 
+                bbox_inches='tight') 
+    
 # conn.close()
