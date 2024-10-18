@@ -83,8 +83,9 @@ def showCategories(conn):
     # plt.show()  # Uncomment to display the plot
     
     # ------------------------ code for pie charts ------------------------
-    totalAmount_Categories = df_categories_woEducation.sum()
+    totalAmount_Categories = df_categories_woEducation.sum().round(2)
     category_percents = df_categories_woEducation/totalAmount_Categories
+    
     print(f"total amount: {totalAmount_Categories}")
     print(category_percents.iloc[0])
     
@@ -100,7 +101,10 @@ def showCategories(conn):
     
     # prepare table
     category_names = df_categories_woEducation.index.tolist()
-    category_values = df_categories_woEducation.values.flatten().tolist()
+    category_values = [round(float(amnt), 2) for amnt in df_categories_woEducation.values.flatten()]
+    # category_amount_each = df_clean[df_clean["Category"].count()]
+    print(df_clean.groupby(['Category']).mean())
+
 
     # create table content with category and amount as columns  
     table_data = [[cat, amnt] for cat, amnt in zip(category_names, category_values)]
@@ -112,6 +116,7 @@ def showCategories(conn):
     table = ax.table(cellText=table_data, 
                      colLabels=["Category", "Amount"],
                      cellLoc='center',
+                     colColours='green',
                      loc='center')
     
     # Adjust layout and font size
