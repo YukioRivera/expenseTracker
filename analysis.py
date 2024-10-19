@@ -102,7 +102,7 @@ def showCategories(conn):
     # prepare table
     category_names = df_categories_woEducation.index.tolist()
     category_values = [round(float(amnt), 2) for amnt in df_categories_woEducation.values.flatten()]
-    # category_amount_each = df_clean[df_clean["Category"].count()]
+    category_amount_each = df_clean.groupby('Category').size()
     print(df_clean.groupby(['Category']).mean())
 
 
