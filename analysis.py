@@ -103,11 +103,11 @@ def showCategories(conn):
     category_names = df_categories_woEducation.index.tolist()
     category_values = [round(float(amnt), 2) for amnt in df_categories_woEducation.values.flatten()]
     category_amount_each = df_clean.groupby('Category').size()
-    print(df_clean.groupby(['Category']).mean())
+    # print(df_clean.groupby('Category').size())
 
 
     # create table content with category and amount as columns  
-    table_data = [[cat, amnt] for cat, amnt in zip(category_names, category_values)]
+    table_data = [[cat, numOf amnt] for cat, amnt in zip(category_names, category_amount_each, category_values)]
     
     # add total row 
     table_data.append(["Total: ", totalAmount_Categories])
