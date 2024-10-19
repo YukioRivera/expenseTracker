@@ -108,7 +108,7 @@ def showCategories(conn):
 
 
     # create table content with category and amount as columns  
-    table_data = [[cat, numOf, amnt] for cat, numOf, amnt in zip(category_names, category_amount_each, category_values)]
+    table_data = [[cat, numOf amnt] for cat, amnt in zip(category_names, category_amount_each, category_values)]
     
     # add total row 
     # table_data.append(["Total: ", totalAmount_Categories])
