@@ -82,7 +82,7 @@ def showCategories(conn):
     plt.savefig('graphs/Category/CategoryExpenses_woEdu.png')
     # plt.show()  # Uncomment to display the plot
     
-    # ------------------------ code for pie charts ------------------------
+    # ------------------------ code for tables ------------------------
     totalAmount_Categories = df_categories_woEducation.sum().round(2)
     category_percents = df_categories_woEducation/totalAmount_Categories
     
@@ -101,27 +101,28 @@ def showCategories(conn):
     
     # prepare table
     category_names = df_categories_woEducation.index.tolist()
-    category_values = [round(float(amnt), 2) for amnt in df_categories_woEducation.values.flatten()]
     category_amount_each = df_clean.groupby('Category').size()
+    category_values = [round(float(amnt), 2) for amnt in df_categories_woEducation.values.flatten()]
+    
     # print(df_clean.groupby('Category').size())
 
 
     # create table content with category and amount as columns  
-    table_data = [[cat, numOf amnt] for cat, amnt in zip(category_names, category_amount_each, category_values)]
+    table_data = [[cat, numOf, amnt] for cat, numOf, amnt in zip(category_names, category_amount_each, category_values)]
     
     # add total row 
-    table_data.append(["Total: ", totalAmount_Categories])
+    # table_data.append(["Total: ", totalAmount_Categories])
     
     # create table
     table = ax.table(cellText=table_data, 
-                     colLabels=["Category", "Amount"],
+                     colLabels=["Category", "Amount in Each Category", "Amount"],
                      cellLoc='center',
-                     colColours='green',
+                     colColours=['green', 'green', 'green'],
                      loc='center')
     
     # Adjust layout and font size
     table.auto_set_font_size(False)
-    table.set_fontsize(14)
+    table.set_fontsize(10)
 
     # Make the table dynamic and adjust size based on text
     # table.auto_set_column_width(col=list(range(len(category_percents.columns))))
