@@ -22,6 +22,7 @@ def showCategories(conn):
     
     # Remove payment information, payments I made towards card 
     df_clean = df[df['Type'] != 'Payment']
+    # df_clean = df[df['Type'] != 'Payment']
     # print(df_clean)
     
     # -------------------- Analysis with edu cost ----------------------------
@@ -83,11 +84,21 @@ def showCategories(conn):
     # plt.show()  # Uncomment to display the plot
     
     # ------------------------ code for tables ------------------------
-    totalAmount_Categories = df_categories_woEducation.sum().round(2)
-    category_percents = df_categories_woEducation/totalAmount_Categories
+    # prepare table
+    category_names = df_categories_wEducation.index.tolist()
+    category_amount_each = df_clean.groupby('Category').size()
+    category_values = [round(float(amnt), 2) for amnt in df_categories_woEducation.values.flatten()]
     
-    print(f"total amount: {totalAmount_Categories}")
-    print(category_percents.iloc[0])
+    # totals 
+    totalAmount_Categories = df_categories_wEducation.sum().round(2)
+    total_ExpenseCount = category_amount_each.sum()
+    category_percents = df_categories_wEducation/totalAmount_Categories
+    
+    # print(f"total amount: {df_clean["Category"]}")
+    # print(df_clean.groupby('Category'))
+    # print(category_percents.iloc[0])
+    for i in df_clean.index.tolist():
+        print(i)
     
     plt.figure(figsize=(10,5)) # increase size of chart 
     
@@ -99,23 +110,19 @@ def showCategories(conn):
     ax.yaxis.set_visible(False)
     ax.set_frame_on(False)
     
-    # prepare table
-    category_names = df_categories_woEducation.index.tolist()
-    category_amount_each = df_clean.groupby('Category').size()
-    category_values = [round(float(amnt), 2) for amnt in df_categories_woEducation.values.flatten()]
-    
     # print(df_clean.groupby('Category').size())
 
 
     # create table content with category and amount as columns  
-    table_data = [[cat, numOf amnt] for cat, amnt in zip(category_names, category_amount_each, category_values)]
+    table_data = [[cat, numOf, amnt] for cat, numOf, amnt in zip(category_names, category_amount_each, category_values)]
     
     # add total row 
-    # table_data.append(["Total: ", totalAmount_Categories])
+    table_data.append(["", "", ""])
+    table_data.append(["Total: ", total_ExpenseCount, totalAmount_Categories])
     
     # create table
     table = ax.table(cellText=table_data, 
-                     colLabels=["Category", "Amount in Each Category", "Amount"],
+                     colLabels=["Category", "Expense Count", "Amount"],
                      cellLoc='center',
                      colColours=['green', 'green', 'green'],
                      loc='center')
