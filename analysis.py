@@ -272,7 +272,9 @@ class dataAnalysis():
             return check_edu        
         else:
             return self.df
-    
+        
+    # creates bar charts the true or false determine the filter on the df
+    # t includes education expenses and f filters out education exenses 
     def create_bar_charts(self, withEdu=True):
         if withEdu:
             df_categories_wEducation = self.get_data(withEdu).groupby("Category")['ABS(Amount)'].sum()
@@ -322,6 +324,13 @@ class dataAnalysis():
             plt.savefig('graphs/Category/CategoryExpenses_woEdu.png')
             
             return df_categories_woEducation
+    
+    # creates the tables that show the count of each expense category 
+    def create_tables(self, withEdu=True):
+        if withEdu:
+            
+        
+
 
 
 # test code
