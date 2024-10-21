@@ -11,6 +11,9 @@ from database import connect_db, create_tables
 from importdata import importData
 from analysis import showCategories
 
+# ------------------------------- class
+import analysis
+
 print("All imports worked")
 
 # connecting to the database
@@ -29,4 +32,14 @@ conn = connect_db()
 
 # ----------------------- Analysis -----------------------
 # Analysis code
-showCategories(conn)
+# showCategories(conn)
+
+
+# ------------------- Class Test
+test = analysis.dataAnalysis(conn)
+
+test.
+test.create_bar_charts(True)
+test.create_bar_charts(False)
+# for index, row in test.iterrows():
+#     print(row)
