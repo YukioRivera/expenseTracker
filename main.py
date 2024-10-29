@@ -9,7 +9,7 @@ import sqlite3
 # imports from files
 from database import connect_db, create_tables
 from importdata import importData
-from analysis import showCategories
+from analysis import dataAnalysis
 
 # ------------------------------- class
 import analysis
@@ -38,8 +38,13 @@ conn = connect_db()
 # ------------------- Class Test
 test = analysis.dataAnalysis(conn)
 
-test.
+# bar
 test.create_bar_charts(True)
 test.create_bar_charts(False)
+
+# table
+test.create_tables(True)
+test.create_tables(False)
 # for index, row in test.iterrows():
 #     print(row)
+

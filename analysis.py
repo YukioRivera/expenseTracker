@@ -28,54 +28,33 @@ class dataAnalysis():
     # creates bar charts the true or false determine the filter on the df
     # it includes education expenses and f filters out education exenses 
     def create_bar_charts(self, withEdu=True):
-        if withEdu:
-            df_categories_wEducation = self.get_data(withEdu).groupby("Category")['ABS(Amount)'].sum()
-            
-            # Plotting
-            plt.figure(figsize=(12, 6))  # Increase figure size
-            
-            # Capture the axes object returned by the plot function, you need to make the plot into an axe object
-            ax = df_categories_wEducation.plot(kind='bar')
+        # Determine title and file paths based on the 'withEdu' flag
+        title_suffix = "(With Education)" if withEdu else "(Without Education)"
+        filename_suffix = "wEdu" if withEdu else "woEdu"
 
-            plt.xticks(rotation=45)  # Rotate x-axis labels
-            plt.xlabel('Category')
-            plt.ylabel('Total Amount')
-            plt.title('Expenses by Category (With Education)')
-            plt.tight_layout()  # Adjust layout
-            # plt.grid(True)
-            
-            # adding labels on top of bars
-            for container in ax.containers:
-                ax.bar_label(container, fmt='%.0f', label_type='edge')
-            
-            plt.savefig('graphs/Category/CategoryExpenses_wEdu.png')
-            
-            return df_categories_wEducation
-        
-        else:
-            df_categories_woEducation = self.get_data(withEdu).groupby("Category")["ABS(Amount)"].sum()
-            
-            # Plotting
-            plt.figure(figsize=(12,6)) # can adjust figure size 
-            
-            # capture axes object returned by the plot function, you need to make the plot into an axe object 
-            ax = df_categories_woEducation.plot(kind='bar')
-            
-            plt.xticks(rotation=45)  # Rotate x-axis labels
-            plt.xlabel('Category')
-            plt.ylabel('Total Amount')
-            plt.title('Expenses by Category (Without Education)')
-            plt.tight_layout()  # Adjust layout
-            # plt.grid(True)
-            
-            # adding labels on top of bars
-            for container in ax.containers:
-                ax.bar_label(container, fmt='%.0f', label_type='edge')
-            
-            plt.savefig('graphs/Category/CategoryExpenses_woEdu.png')
-            
-            return df_categories_woEducation
-    
+        # Get data, grouping by category and summing amounts
+        df_categories = self.get_data(withEdu).groupby("Category")["ABS(Amount)"].sum()
+
+        # Plotting
+        plt.figure(figsize=(12, 6))  # Adjust figure size as needed
+        ax = df_categories.plot(kind='bar')
+
+        # Configure plot appearance
+        plt.xticks(rotation=45)
+        plt.xlabel('Category')
+        plt.ylabel('Total Amount')
+        plt.title(f'Expenses by Category {title_suffix}')
+        plt.tight_layout()
+
+        # Add labels to bars
+        for container in ax.containers:
+            ax.bar_label(container, fmt='%.0f', label_type='edge')
+
+        # Save the plot
+        plt.savefig(f'graphs/Category/CategoryExpenses_{filename_suffix}.png')
+
+        return df_categories
+
     # creates the tables that show the count of each expense category 
     def create_tables(self, withEdu=True):
         # Group the data by 'Category'
@@ -92,6 +71,7 @@ class dataAnalysis():
             'Amount': category_amounts
         }).reset_index(drop=True) # resets the index to have category as a column, drop the old index 
         
+        # print(category_amounts)
         # calcualte the sum totals 
         total_amount_sum = round(category_amounts.sum(), 2)  # sum of all expenses 
         total_expense_count = category_expense_count.sum()   # sum of total expense count 
@@ -111,6 +91,7 @@ class dataAnalysis():
         
         # convert dataframe to list of lists (which is what matpltlib expects for tables)
         table_data = category_summary_df.values.tolist()
+        # print(category_summary_df)
         
         # create the table
         table = ax.table(cellText=table_data,
@@ -128,18 +109,20 @@ class dataAnalysis():
             plt.savefig('graphs/Category/Table_CategoryExpenses_wEdu.png')
         else:
             plt.savefig('graphs/Category/Table_CategoryExpenses_woEdu.png')
-
+    
+        # returns df of (index, category, expense count, amount)
+        return category_summary_df
 
 # test code
-import database 
-conn = database.connect_db()
+# import database 
+# conn = database.connect_db()
 
-test = dataAnalysis(conn)
-# print(test.get_data(True))
-# print("-------------------------------------------------------------")
-# print(test.get_data(False))
-test.create_bar_charts()
-test.create_bar_charts(False)
+# test = dataAnalysis(conn)
+# # print(test.get_data(True))
+# # print("-------------------------------------------------------------")
+# # print(test.get_data(False))
+# test.create_bar_charts()
+# test.create_bar_charts(False)
 
-test.create_tables()
-test.create_tables(False)
+# test.create_tables()
+# test.create_tables(False)
