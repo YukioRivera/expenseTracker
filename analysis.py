@@ -113,11 +113,26 @@ class dataAnalysis():
         # returns df of (index, category, expense count, amount)
         return category_summary_df
 
-# test code
-# import database 
-# conn = database.connect_db()
+#   1.	Temporal Insights:
+#       Day of Week: Identify spending patterns tied to specific days.
+#       Month and Quarter: Examine if spending varies seasonally or monthly.
+#       Time of Day: Split transactions into periods (morning, afternoon, evening) to find peak spending times.
+#       Rolling Totals: Calculate 7-day, 30-day, and 90-day rolling averages to observe short- and long-term spending trends.
+    
+    def dayofTheWeek(self):
+        
+        df = self.get_data()
+        print(df["TransactionDate"]["Description"])
+    
+    # 
 
-# test = dataAnalysis(conn)
+# test code
+import database 
+conn = database.connect_db()
+
+test = dataAnalysis(conn)
+test.dayofTheWeek()
+
 # # print(test.get_data(True))
 # # print("-------------------------------------------------------------")
 # # print(test.get_data(False))
