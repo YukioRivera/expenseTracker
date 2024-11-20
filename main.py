@@ -27,7 +27,7 @@ conn = connect_db()
 # ----------------------- import data from csv -----------------------
 # import data from csv
 # df = importData(conn)
-# print(df) # check the table putput
+
 # --------------------------------------------------------------------
 
 # ----------------------- Analysis -----------------------
@@ -36,15 +36,19 @@ conn = connect_db()
 
 
 # ------------------- Class Test
-test = analysis.dataAnalysis(conn)
+test = dataAnalysis(conn)
+
+test.dayofTheWeek(True)
+print("Without Edu")
+test.dayofTheWeek(False)
 
 # bar
-test.create_bar_charts(True)
-test.create_bar_charts(False)
+# test.create_bar_charts(True)
+# test.create_bar_charts(False)
 
 # table
-test.create_tables(True)
-test.create_tables(False)
+# test.create_tables(True)
+# test.create_tables(False)
 # for index, row in test.iterrows():
 #     print(row)
 

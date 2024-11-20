@@ -119,23 +119,42 @@ class dataAnalysis():
 #       Time of Day: Split transactions into periods (morning, afternoon, evening) to find peak spending times.
 #       Rolling Totals: Calculate 7-day, 30-day, and 90-day rolling averages to observe short- and long-term spending trends.
     
-    def dayofTheWeek(self):
+    # convert the date to day of the week then group by the day of the week and sum it 
+    def dayofTheWeek(self, withEdu=True):
         
-        df = self.get_data()
-        print(df["TransactionDate"]["Description"])
+        # getting data
+        df = self.get_data(withEdu)
+        df['TransactionDate'] = pd.to_datetime(df['TransactionDate'])
+        df['Day'] = df['TransactionDate'].dt.day_name()
+        
+        # group by day  and sum of spending
+        spending_by_day = df.groupby('Day')['ABS(Amount)'].sum()
+        
+        # day order 
+        days_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        
+        # applying day order to the series 
+        spending_by_day = spending_by_day.reindex(days_order)
+        print(spending_by_day)
+        
+        return spending_by_day
+        
+        # check to make sure the values are correct
+        # print("----------check---------------------")
+        # print(df.groupby('Day')['ABS(Amount)'].sum())
     
     # 
 
 # test code
-import database 
-conn = database.connect_db()
+# import database 
+# conn = database.connect_db()
 
-test = dataAnalysis(conn)
-test.dayofTheWeek()
+# test = dataAnalysis(conn)
+# test.dayofTheWeek()
 
-# # print(test.get_data(True))
-# # print("-------------------------------------------------------------")
-# # print(test.get_data(False))
+# print(test.get_data(True))
+# print("-------------------------------------------------------------")
+# print(test.get_data(False))
 # test.create_bar_charts()
 # test.create_bar_charts(False)
 

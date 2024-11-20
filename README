@@ -148,7 +148,7 @@ docker run -it --rm expense-tracker
 To ensure data (like your SQLite database and CSV backups) persists between runs, use Docker volumes:
 
 ```bash
-docker run -it --rm -v /home/dev/expenseTracker:/workspace --name expense-tracker expense-tracker bash
+docker run -it -v /home/dev/expenseTracker:/workspace --name expense-tracker expense-tracker bash
 ```
 
 ---

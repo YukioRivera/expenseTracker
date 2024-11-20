@@ -16,7 +16,7 @@ def create_tables(conn):
     sql_statement = """
                 CREATE TABLE IF NOT EXISTS expenses ( 
                 id INTEGER PRIMARY KEY, 
-                TransactionDate date NOT NULL, 
+                TransactionDate datetime NOT NULL, 
                 Description TEXT NOT NULL,
                 Category TEXT NOT NULL, 
                 Type TEXT NOT NULL,
