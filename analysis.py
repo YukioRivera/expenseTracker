@@ -128,7 +128,7 @@ class dataAnalysis():
         df['Day'] = df['TransactionDate'].dt.day_name()
         
         # group by day  and sum of spending
-        spending_by_day = df.groupby('Day')['ABS(Amount)'].sum()
+        spending_by_day = df.groupby('Day')['ABS(Amount)'].sum().round(2)
         
         # day order 
         days_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -137,13 +137,58 @@ class dataAnalysis():
         spending_by_day = spending_by_day.reindex(days_order)
         print(spending_by_day)
         
+        # create the ax object to crete the table
+        fig, ax = plt.subplots()
+         
+        # hide axes
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
+        ax.set_frame_on(False)
+        
+        # Convert Series to DataFrame for transposition
+        spending_by_day = pd.DataFrame(spending_by_day)
+
+        # Transpose the DataFrame
+        spending_by_day = spending_by_day.T
+
+        # Convert DataFrame to list of lists (now with columns as inner lists)
+        table_data = spending_by_day.values.tolist()
+        # print(table_data)
+
+        # Create the table (with transposed data)
+        table_data = [['Day'] + days_order, ['Amount'] + spending_by_day.values.tolist()]  # Stacked data
+
+        table = ax.table(cellText=table_data,
+                        cellLoc='center',
+                        colColours=['green'] * 2,  # Two columns
+                        loc='center')
+
+        # Adjust layout and font size
+        table.auto_set_font_size(False)
+        table.set_fontsize(10)
+
+        # Adjust column widths
+        for i, col in enumerate(table.get_celld().values()):
+            col.set_width(0.5)  # Two columns, so each gets 0.5 width
+
+        # Add cell padding
+        for cell in table.get_celld().values():
+            cell.set_height(0.15)
+
+        # Add header padding
+        for cell in table.get_celld().values():
+            if cell.get_text().get_text() in ['Day',
+                                            'Amount']:  # Check for headers
+                cell.set_height(0.2)
+
+        # Save the table as an image
+        if withEdu:
+            plt.savefig('graphs/Category/Table_dailyExpense_wEdu.png')
+        else:
+            plt.savefig('graphs/Category/Table_dailyExpense_woEdu.png')
+        
         return spending_by_day
         
-        # check to make sure the values are correct
-        # print("----------check---------------------")
-        # print(df.groupby('Day')['ABS(Amount)'].sum())
-    
-    # 
 
 # test code
 # import database 
