@@ -2,6 +2,7 @@ import sqlite3
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import calendar 
 
 class dataAnalysis():
     
@@ -114,12 +115,13 @@ class dataAnalysis():
         return category_summary_df
 
 #   1.	Temporal Insights:
-#       Day of Week: Identify spending patterns tied to specific days.
+#       
 #       Month and Quarter: Examine if spending varies seasonally or monthly.
 #       Time of Day: Split transactions into periods (morning, afternoon, evening) to find peak spending times.
 #       Rolling Totals: Calculate 7-day, 30-day, and 90-day rolling averages to observe short- and long-term spending trends.
     
     # convert the date to day of the week then group by the day of the week and sum it 
+    # Day of Week: Identify spending patterns tied to specific days.
     def dayofTheWeek(self, withEdu=True):
         
         # getting data
@@ -151,16 +153,14 @@ class dataAnalysis():
         # Transpose the DataFrame
         spending_by_day = spending_by_day.T
 
-        # Convert DataFrame to list of lists (now with columns as inner lists)
+        # Convert DataFrame to list of lists
         table_data = spending_by_day.values.tolist()
-        # print(table_data)
-
-        # Create the table (with transposed data)
-        table_data = [['Day'] + days_order, ['Amount'] + spending_by_day.values.tolist()]  # Stacked data
-
+        
+        # Create the table
         table = ax.table(cellText=table_data,
+                        colLabels=days_order,
                         cellLoc='center',
-                        colColours=['green'] * 2,  # Two columns
+                        colColours=['green'] * len(days_order),
                         loc='center')
 
         # Adjust layout and font size
@@ -169,17 +169,16 @@ class dataAnalysis():
 
         # Adjust column widths
         for i, col in enumerate(table.get_celld().values()):
-            col.set_width(0.5)  # Two columns, so each gets 0.5 width
+            col.set_width(1 / len(days_order))  # Distribute widths evenly
 
         # Add cell padding
         for cell in table.get_celld().values():
-            cell.set_height(0.15)
+            cell.set_height(0.15)  # Adjust cell height as needed
 
         # Add header padding
         for cell in table.get_celld().values():
-            if cell.get_text().get_text() in ['Day',
-                                            'Amount']:  # Check for headers
-                cell.set_height(0.2)
+            if cell.get_text().get_text() in days_order:  # Check if it's a header
+                cell.set_height(0.2)  # Adjust header height as needed
 
         # Save the table as an image
         if withEdu:
@@ -188,6 +187,126 @@ class dataAnalysis():
             plt.savefig('graphs/Category/Table_dailyExpense_woEdu.png')
         
         return spending_by_day
+    
+    # def monthlySpending(self, withEdu=True):
+        
+    #     # getting data
+    #     df = self.get_data(withEdu)
+    #     df['TransactionDate'] = pd.to_datetime(df['TransactionDate'])
+    #     df['Month'] = df['TransactionDate'].dt.to_period('M')
+        
+    #     # group by day  and sum of spending
+    #     spending_by_month = df.groupby('Month')['ABS(Amount)'].sum().round(2)
+        
+    #     print(spending_by_month)
+        
+    #     # day order 
+    #     month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        
+    #     # applying day order to the series 
+    #     spending_by_month = spending_by_month.reindex(month_order)
+    #     print(spending_by_month)
+        
+    #     # create the ax object to crete the table
+    #     fig, ax = plt.subplots()
+         
+    #     # hide axes
+    #     ax.xaxis.set_visible(False)
+    #     ax.yaxis.set_visible(False)
+    #     ax.set_frame_on(False)
+        
+    #     # Convert Series to DataFrame for transposition
+    #     spending_by_Month = pd.DataFrame(spending_by_month)
+
+    #     # Transpose the DataFrame
+    #     spending_by_Month= spending_by_month.T
+
+    #     # Convert DataFrame to list of lists
+    #     table_data = spending_by_month.values.tolist()
+        
+    #     # Create the table
+    #     table = ax.table(cellText=table_data,
+    #                     colLabels=month_order,
+    #                     cellLoc='center',
+    #                     colColours=['green'] * len(month_order),
+    #                     loc='center')
+
+    #     # Adjust layout and font size
+    #     table.auto_set_font_size(False)
+    #     table.set_fontsize(10)
+
+    #     # Adjust column widths
+    #     for i, col in enumerate(table.get_celld().values()):
+    #         col.set_width(1 / len(month_order))  # Distribute widths evenly
+
+    #     # Add cell padding
+    #     for cell in table.get_celld().values():
+    #         cell.set_height(0.15)  # Adjust cell height as needed
+
+    #     # Add header padding
+    #     for cell in table.get_celld().values():
+    #         if cell.get_text().get_text() in month_order:  # Check if it's a header
+    #             cell.set_height(0.2)  # Adjust header height as needed
+
+    #     # Save the table as an image
+    #     if withEdu:
+    #         plt.savefig('graphs/Category/Table_dailyExpense_wEdu.png')
+    #     else:
+    #         plt.savefig('graphs/Category/Table_dailyExpense_woEdu.png') 
+        
+        # return spending_by_month 
+        
+    def monthlySpending(self, withEdu=True):
+        
+        # get data
+        df = self.get_data(withEdu)
+        
+        df['TransactionDate'] = pd.to_datetime(df['TransactionDate'])
+        # df['Month'] = df['TransactionDate'].dt.to_period('M') # keeps year and month 
+        df['Month'] = df['TransactionDate'].dt.month # just keeps month in number format 
+        print(df['Month'])
+        
+        # group by day and sum of spending
+        spending_by_month = df.groupby('Month')['ABS(Amount)'].sum().round(2)
+                
+        return spending_by_month 
+    
+    def monthlySpending_withYear(self, withEdu=True):
+        
+        """
+        Analyze spending by month and year in chronological order. 
+        """
+        df = self.get_data(withEdu)
+        df['TransactionDate'] = pd.to_datetime(df['TransactionDate'])
+        
+        # Extract month and year as integers for accurate sorting
+        df['Year'] = df['TransactionDate'].dt.year
+        df['Month'] = df['TransactionDate'].dt.month
+        
+        # Group by year and month, then sum the spending
+        spending_by_year_month = df.groupby(['Year', 'Month'])['ABS(Amount)'].sum().round(2)
+
+        # Create a new 'Year-Month' index for presentation
+        spending_by_year_month.index = spending_by_year_month.index.map(lambda x: f"{x[0]}-{calendar.month_name[x[1]]}")
+
+        # print(spending_by_year_month)
+        return spending_by_year_month
+    
+    def category_by_month(self, withEdu=True):
+        
+        # get data
+        df = self.get_data(withEdu)
+        
+        # make into datetime 
+        df['TransactionDate'] = pd.to_datetime(df['TransactionDate'])
+        
+        # Extract month and year as integers for accurate sorting
+        df['Year'] = df['TransactionDate'].dt.year
+        df['Month'] = df['TransactionDate'].dt.month
+
+        month_cat = df.groupby(['Year', 'Month', 'Category'])['ABS(Amount)'].sum()
+        
+        return month_cat 
         
 
 # test code
