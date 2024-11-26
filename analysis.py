@@ -189,8 +189,14 @@ class dataAnalysis():
         df['Year'] = df['TransactionDate'].dt.year
         df['Month'] = df['TransactionDate'].dt.month
 
-        month_cat = df.groupby(['Year', 'Month', 'Matches'])['Amount'].sum()
+        # group by year, month, and matches and sum amount
+        month_cat = df.groupby(['Year', 'Month', 'Matches'])['Amount'].sum().reset_index()
+        
+        # sort by year, month, and then amount (descending with in each month)
         month_cat = month_cat.sort_values(ascending=False)
+        
+        # set the index for the desired output structure 
+        month_cat = month_cat.set_index(['Year', 'Month', 'Matches'])
         
         return month_cat 
         
