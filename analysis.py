@@ -3,13 +3,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import calendar 
+import re
+import util
+from thefuzz import fuzz
+from thefuzz import process
+
+# maybe remove 
+from collections import OrderedDict
+
 
 class dataAnalysis():
     
     def __init__(self, conn):
         df = pd.read_sql_query("SELECT TransactionDate, Description, Category, Type, ABS(Amount) FROM expenses", conn)
+        df.rename(columns={'ABS(Amount)': 'Amount'}, inplace=True)
         df_cleaned = df[df['Type'] != 'Payment']
         df_cleaned = df_cleaned.drop(columns=['Type'])
+        df_matches = util.StandardizeDescriptions(df_cleaned)
         self.conn = conn
         self.df = df_cleaned
         
@@ -19,6 +29,7 @@ class dataAnalysis():
     # Defaulted at True and it will return data with edu expenses included, 
     # false will return data filtered without edu expenses 
     def get_data(self, withEdu=True):
+        
         if withEdu:
             return self.df
                
@@ -34,7 +45,7 @@ class dataAnalysis():
         filename_suffix = "wEdu" if withEdu else "woEdu"
 
         # Get data, grouping by category and summing amounts
-        df_categories = self.get_data(withEdu).groupby("Category")["ABS(Amount)"].sum()
+        df_categories = self.get_data(withEdu).groupby("Category")["Amount"].sum()
 
         # Plotting
         plt.figure(figsize=(12, 6))  # Adjust figure size as needed
@@ -62,7 +73,7 @@ class dataAnalysis():
         category_data = self.get_data(withEdu).groupby('Category')
 
         # Calculate sums and counts for each category
-        category_amounts = category_data["ABS(Amount)"].sum().round(2)  # sum of expenses for each category, rounded to 2 decimal places
+        category_amounts = category_data["Amount"].sum().round(2)  # sum of expenses for each category, rounded to 2 decimal places
         category_expense_count = category_data.size()  # count of each category
 
         # Calculate sums and counts for each category 
@@ -130,7 +141,7 @@ class dataAnalysis():
         df['Day'] = df['TransactionDate'].dt.day_name()
         
         # group by day  and sum of spending
-        spending_by_day = df.groupby('Day')['ABS(Amount)'].sum().round(2)
+        spending_by_day = df.groupby('Day')['Amount'].sum().round(2)
         
         # day order 
         days_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -267,7 +278,7 @@ class dataAnalysis():
         print(df['Month'])
         
         # group by day and sum of spending
-        spending_by_month = df.groupby('Month')['ABS(Amount)'].sum().round(2)
+        spending_by_month = df.groupby('Month')['Amount'].sum().round(2)
                 
         return spending_by_month 
     
@@ -284,7 +295,7 @@ class dataAnalysis():
         df['Month'] = df['TransactionDate'].dt.month
         
         # Group by year and month, then sum the spending
-        spending_by_year_month = df.groupby(['Year', 'Month'])['ABS(Amount)'].sum().round(2)
+        spending_by_year_month = df.groupby(['Year', 'Month'])['Amount'].sum().round(2)
 
         # Create a new 'Year-Month' index for presentation
         spending_by_year_month.index = spending_by_year_month.index.map(lambda x: f"{x[0]}-{calendar.month_name[x[1]]}")
@@ -304,10 +315,75 @@ class dataAnalysis():
         df['Year'] = df['TransactionDate'].dt.year
         df['Month'] = df['TransactionDate'].dt.month
 
-        month_cat = df.groupby(['Year', 'Month', 'Category'])['ABS(Amount)'].sum()
+        month_cat = df.groupby(['Year', 'Month', 'Category'])['Amount'].sum()
+        
+        return month_cat 
+    
+    def category_by_year(self, withEdu=True):
+        
+        # get data
+        df = self.get_data(withEdu)
+        
+        # make into datetime 
+        df['TransactionDate'] = pd.to_datetime(df['TransactionDate'])
+        
+        # Extract month and year as integers for accurate sorting
+        df['Year'] = df['TransactionDate'].dt.year
+
+        year_cat = df.groupby(['Year', 'Category'])['Amount'].sum()
+        
+        return year_cat  
+    
+    ##### ----- specific locations ----- #####
+    
+    # this is displaying specific stores where most of the money is spent 
+    # going to groupby the specific vendor and total amount spent there 
+    def SpecificVendors_TotalSpent(self, withEdu=True):
+        
+        # get data 
+        df = self.get_data(withEdu)
+
+        # group by specific vendors
+        result = df.groupby("Matches")['Amount'].sum()
+        result = result.sort_values(ascending=False)
+        print(result.to_string())
+
+        return df
+    
+    # this is displaying specific stores where most of the money is spent 
+    # going to groupby the specific vendor and total amount spent there by year 
+    def SpecificVendors_TotalSpent_Monthly(self, withEdu=True):
+        # get data
+        df = self.get_data(withEdu)
+        
+        # make into datetime 
+        df['TransactionDate'] = pd.to_datetime(df['TransactionDate'])
+        
+        # Extract month and year as integers for accurate sorting
+        df['Year'] = df['TransactionDate'].dt.year
+        df['Month'] = df['TransactionDate'].dt.month
+
+        month_cat = df.groupby(['Year', 'Month', 'Matches'])['Amount'].sum()
+        month_cat = month_cat.sort_values(ascending=False)
         
         return month_cat 
         
+        
+        
+    def SpecificVendors_TotalSpent_Yearly(self, withEdu=True):
+        # get data
+        df = self.get_data(withEdu)
+        
+        # make into datetime 
+        df['TransactionDate'] = pd.to_datetime(df['TransactionDate'])
+        
+        # Extract month and year as integers for accurate sorting
+        df['Year'] = df['TransactionDate'].dt.year
+
+        year_cat = df.groupby(['Year', 'Matches'])['Amount'].sum()
+        year_cat = year_cat.sort_values(ascending=False)
+        
+        return year_cat 
 
 # test code
 # import database 

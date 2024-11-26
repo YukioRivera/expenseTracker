@@ -1,0 +1,209 @@
+All imports worked
+3.27.2
+Year  Matches                   
+2024  COSTCO WHSE                   2098.25
+      AMAZON                        1363.97
+      VILLA DEL PALMAR              1248.37
+      DIGBYS MARKET                 1126.99
+      UHAUL                         1046.26
+      FUSION SPECIALTY PHARMACY      929.46
+      REDEMPTION CREDIT              927.80
+      LYFT                           865.57
+      NBOME COMLEX                   790.00
+      UNITED                         741.04
+      HARMONS                        683.13
+      AMERICASTIRECO                 638.14
+      SAFEWAY                        633.44
+      LS IBB CYCLERY AMP MULTI       529.35
+      24 Hour Fitness                447.99
+      FRONTGATETX SICKN              436.91
+      FAMILY DOLLAR                  407.35
+      UTAH MVED                      348.75
+      MCDONALDS                      344.35
+      SPIRIT AIRL                    338.36
+      WALMART                        316.48
+      FACTORY POWER SPORTS           288.21
+      BURGER KING                    276.40
+      SMITHS                         272.09
+      GOOD CHOP                      267.98
+      PROGRESSIVE                    262.00
+      SALT LAKE EXPRESS              259.12
+      ROVERCOM PET SVCS              258.63
+      FRONTIER AI                    249.92
+      DELTA AIR                      238.10
+      SOUTHWEST SKIN AND CANCER      234.03
+      PAYRANGE MOBILE                230.00
+      7-ELEVEN                       221.31
+      WOOTING                        219.49
+      ROCKY VISTA HEALTH CENTER      205.96
+      CHICKFILA                      199.69
+      AMAZON PRIME                   180.53
+      AIRBNB                         180.20
+      CHEVRON                        177.54
+      AMERICAN AI                    175.00
+      TARGET                         174.01
+      ST GEORGE SHUTTLE              167.28
+      RTITMOBILETRAVEL HOTELS        161.03
+      MAVERIK                        137.38
+      ZACHARYS RESTAURANT            129.32
+      BOMBAY CAFE                    128.97
+      COSTCO                         127.99
+      SUBWAY                         127.03
+      APPLEBILL                      125.77
+      US PRO GAS                     124.78
+      BUDGET RAC SALT LAKE           122.46
+      DRIVER LICENSE DIXIE           122.00
+      KITCHEN NAIL BAR COLEMAN       118.80
+      STEAM GAMES                    107.93
+      OREILLY                        105.63
+      TUACAHN CENTER                 104.00
+      PILOT GAS                      100.00
+      RESIDENCES SKY BAR              83.91
+      CARLS JR                        83.90
+      TACO BELL                       82.98
+      EXXON                           81.67
+      CHATGPT SUBSCRIPTION            80.00
+      JOY PARK FLY                    79.20
+      BEST BUY                        76.39
+      DISCOUNT VACATION COSTA         76.00
+      OCEAN BUFFET                    75.00
+      WINGSTOP                        73.99
+      ARCO                            71.63
+      SHIVWITS CONVENIENCE            71.48
+      SPOTIFY USA                     70.89
+      STEPHEN WADE TOYOTA             70.86
+      INTERMOUNTAIN HEALTHCARE        70.49
+      FIESTA FUN CENTER               70.29
+      UBER                            69.54
+      DUBS BBQ                        68.38
+      ENTERPRISE RENTACAR             66.56
+      LA BEST                         66.00
+      RED MOUNTAIN MARKET             64.98
+      KFC                             64.35
+      JAGEX LTD                       62.93
+      LOWES                           62.67
+      STATE OF CALIF DMV              60.00
+      HERNANDEZ MARKET                58.67
+      AMWELL                          55.00
+      SPEEDWAY                        54.72
+      CVSEXTRACARE RI                 54.26
+      JTITWITCHTV SUB SRVCS           53.90
+      CRABSLAYER                      53.00
+      ROSS                            52.27
+      THE UPS STORE                   51.88
+      AWSOM                           50.14
+      PY PCRF                         50.00
+      SHELL OIL                       49.43
+      SAV ON GASOLINE INC             49.22
+      FOOD4LESS                       46.29
+      PETSMART                        45.88
+      PANDA EXPRESS                   45.83
+      BARSTOW FUELS                   45.82
+      EBAY                            45.51
+      SOUL RAMEN                      43.33
+      THE HOME DEPOT                  42.12
+      ALASKA AIR                      40.00
+      TICKETS                         40.00
+      PHRSOUTHERNUTAHEARNOSEAMPT      40.00
+      GOOGLE STORAGE                  39.98
+      USPS                            39.89
+      MOBETTAHS                       38.10
+      BRONCO BILLYS PIZZA             36.14
+      SP PREMIER YARNSCOM             35.93
+      MEGAPLEX                        35.22
+      THE GAME FORT                   35.00
+      PIZZA MY HEART                  34.53
+      DUTCHMANS                       34.17
+      BEANS AMP BREWS                 33.49
+      INNOUT                          33.39
+      FEELLOVE COFFEE                 32.66
+      PERFORMANCE FITNESS             32.01
+      DICKS SPORTING GOODS            32.01
+      WESTSIDE HARDWARE               31.82
+      COMMONS EAST CAFE               31.77
+      GOLDEN CORRAL                   31.22
+      THE LOCAL SHOPPE                30.98
+      ANDALES R                       29.91
+      XETAVA GARDENS CAFE             26.72
+      DOMINOS                         26.31
+      ASIAN MARKET ST GEORGE          25.80
+      PANOCHE FOOD MART               25.00
+      STARBUCKS                       24.82
+      LITTLE CAESARS                  22.47
+      ELPOLLOLOCO                     22.08
+      FERRELLSDONUTS                  21.94
+      CARISSADELACRUZ                 21.86
+      CLAUDEAI SUBSCRIPTION           21.35
+      SAN PEDRO MARKET                19.91
+      THE BAGELRY                     19.90
+      PANDARESTAU                     19.40
+      ISLAND GRINDS                   19.32
+      RITE AID                        18.70
+      THE ADOBE ICEBOX                18.60
+      NOODLE AMP DUMPLING             18.32
+      SHAKE SHACK                     18.25
+      AMAZON WEB SERVICES             18.23
+      MICHAELS                        18.09
+      MARGARITA GRILL                 17.72
+      RAFAELANTONIOCASAS              17.51
+      SANTA CRUZ GROCERY              16.51
+2023  SAFEWAY                         16.38
+2024  AUTOZONE                        16.01
+      PAULAS CAZUELA                  16.00
+      BIT AND SPUR RESTAUR            15.48
+      JOANN                           15.03
+      ICE CREAM FACTORY               14.80
+      JACKS HAMBUR                    14.43
+      FENG CHA                        14.38
+      DE LA HACIENDA TAQUERIA         13.99
+      RED ROCK DRY CLEANERS           13.97
+      WENDYS                          13.82
+      JACK IN THE BOX                 13.58
+      DOLLAR TREE                     13.16
+      MARKET MEX VTA                  12.85
+      PERKS COFFEE                    12.83
+      ETSY INC                        12.00
+      MENCHIES DINOSA                 11.95
+      SWITCHPOINT CRC                 11.90
+      VONS                            11.24
+      UT MEDICAL                      11.00
+      FOSTERS FREEZE                  10.95
+      ALBERTSONS                      10.91
+      WM SUPERCENTER                  10.68
+      MENCHIES                        10.39
+      TCGPLAYER                       10.15
+      GULF OIL                        10.02
+      DUTCH BROS                      10.00
+      AMAMEMBERSHIP DUES              10.00
+      ALFREDOS                         9.73
+      TOLL ROADS                       9.18
+      JALAPENOS TAQUERIA               8.19
+      TAFFYSHOP                        7.99
+      OXXO CARACOL                     7.60
+      PINKBOX DOUGHNUTS                7.59
+      VENDING                          7.58
+      BOARDWALK FOOD CARTS             7.09
+      FASTRAK VIOLATION                7.00
+      LITTLEXHUMA                      6.99
+      DICKEYS BBQ                      6.61
+      RIVER ROCK ROASTING              6.58
+      VIVA LAS AREPAS                  5.96
+      BARNES AMP NOBLE                 5.92
+      GOFUNDME                         5.68
+      PAWS THRIFT STORE                5.25
+      FOREIGN TRANSACTION FEE          5.19
+      WESTIN KIERLAND DINING           5.16
+      TUACAHN CONCESSIONS              5.00
+      LEMONADE ICE CREAM               5.00
+      RIOT                             4.99
+      CC SLAUGHTERS PUERTO VALL        4.98
+      FRESH ATTRACTIONS                4.65
+      A FRESH ATTRC                    4.32
+      POP DRINKS                       4.30
+      SWEETSOFTIE                      3.99
+      CARMENHEFFE                      3.92
+      NETOS BAKERY PANADERIA           3.81
+      TRUDYS SPOT                      3.39
+      ST GEORGE HOSPITAL CAFE          2.92
+      CA DMV FEE                       1.17
+      DAYLIGHT DONUTS SAINT            1.08

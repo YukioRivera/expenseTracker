@@ -143,7 +143,7 @@ docker run -it --rm expense-tracker
 - `-it`: Runs the container in interactive mode with a pseudo-TTY.
 - `--rm`: Automatically removes the container when it exits.
 
-### 6. Persisting Data with Volumes
+### 6. Persisting Data with Volumes (Better alt)
 
 To ensure data (like your SQLite database and CSV backups) persists between runs, use Docker volumes:
 

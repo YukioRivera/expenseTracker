@@ -26,7 +26,7 @@ conn = connect_db()
 
 # ----------------------- import data from csv -----------------------
 # import data from csv
-# df =` importData(conn)
+# df = importData(conn)
 
 # --------------------------------------------------------------------
 
@@ -41,14 +41,20 @@ test = dataAnalysis(conn)
 # test.dayofTheWeek(True)
 # print("Without Edu")
 # test.dayofTheWeek(False)
-combinedMonths = test.monthlySpending(False)
+# combinedMonths = test.monthlySpending(False)
 # print(combinedMonths)
-year_month = test.monthlySpending_withYear(False)
+# year_month = test.monthlySpending_withYear(False)
 # print(year_month)
 
 
-catMonth = test.category_by_month(False)
-print(catMonth)
+# catMonth = test.category_by_month(False)
+# catMonth = test.category_by_year(False)
+# print(catMonth)
+
+# result = test.SpecificVendors_TotalSpent(False)
+# result = test.SpecificVendors_TotalSpent_Monthly(False)
+result = test.SpecificVendors_TotalSpent_Yearly(False)
+print(result.to_string())
 # bar
 # test.create_bar_charts(True)
 # test.create_bar_charts(False)
