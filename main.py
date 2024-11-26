@@ -52,8 +52,8 @@ test = dataAnalysis(conn)
 # print(catMonth)
 
 # result = test.SpecificVendors_TotalSpent(False)
-# result = test.SpecificVendors_TotalSpent_Monthly(False)
-result = test.SpecificVendors_TotalSpent_Yearly(False)
+result = test.SpecificVendors_TotalSpent_Monthly(False)
+# result = test.SpecificVendors_TotalSpent_Yearly(False)
 print(result.to_string())
 # bar
 # test.create_bar_charts(True)
