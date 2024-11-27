@@ -309,7 +309,7 @@ class dataAnalysis():
         median_transaction.rename(columns={'Amount': 'Median Transaction Amount'}, inplace=True)
         return median_transaction
     
-    def transaction_count_by_vendor_over_time(self, withEdu=True, freq='M'):
+    def transaction_count_by_vendor_over_time(self, withEdu=True, freq='ME'):
         """
         Counts the number of transactions per vendor over time.
         - freq: Frequency for resampling ('D' for daily, 'W' for weekly, 'M' for monthly, etc.).
