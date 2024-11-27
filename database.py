@@ -4,7 +4,7 @@ def connect_db():
     conn = None
     try:
         # connceting to database 
-        conn = sqlite3.connect("expenseDataBase")
+        conn = sqlite3.connect("expenseDataBase.db")
         print(sqlite3.sqlite_version)
         
     except sqlite3.Error as e:
@@ -32,7 +32,7 @@ def create_tables(conn):
     
 def insert_data(df):
     try:
-        with sqlite3.connect("expenseDataBase") as conn:
+        with sqlite3.connect("expenseDataBase.db") as conn:
             cursor = conn.cursor()    
     except sqlite3.Error as e:
         print(e)

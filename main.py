@@ -6,62 +6,118 @@ import numpy as np
 import csv
 import sqlite3
 
-# imports from files
+# Imports from files
 from database import connect_db, create_tables
 from importdata import importData
-from analysis import dataAnalysis
 
-# ------------------------------- class
-import analysis
+# Main Class 
+from analysis import dataAnalysis
 
 print("All imports worked")
 
-# connecting to the database
-conn = connect_db()
+# Updated Main Function
+def main():
+    # Connect to the SQLite database
+    conn = sqlite3.connect('expenseDataBase.db')
 
-# ----------------------- create tables -----------------------
-# create tables - rerun this when want to tupdate the tables 
-# create_tables(conn)
-# -------------------------------------------------------------
+    # Create an instance of dataAnalysis
+    analysis = dataAnalysis(conn)
 
-# ----------------------- import data from csv -----------------------
-# import data from csv
-# df = importData(conn)
+    # Call each function and print outputs
 
-# --------------------------------------------------------------------
+    print("----- DataFrame -----")
+    analysis.print()  # This already prints the DataFrame
 
-# ----------------------- Analysis -----------------------
-# Analysis code
-# showCategories(conn)
+    print("\n----- get_data() -----")
+    df_data = analysis.get_data()
+    print(df_data.to_string())
 
+    print("\n----- get_category_expenses() -----")
+    df_category_expenses = analysis.get_category_expenses(False)
+    print(df_category_expenses.to_string())
 
-# ------------------- Class Test
-test = dataAnalysis(conn)
+    print("\n----- get_category_summary() -----")
+    df_category_summary = analysis.get_category_summary(False)
+    print(df_category_summary.to_string())
 
-# test.dayofTheWeek(True)
-# print("Without Edu")
-# test.dayofTheWeek(False)
-# combinedMonths = test.monthlySpending(False)
-# print(combinedMonths)
-# year_month = test.monthlySpending_withYear(False)
-# print(year_month)
+    print("\n----- get_day_of_week_expenses() -----")
+    df_day_of_week_expenses = analysis.get_day_of_week_expenses(False)
+    print(df_day_of_week_expenses.to_string())
+    
+    print("\n----- get_day_of_month_week_expenses() -----")
+    df_get_day_of_month_week_expenses = analysis.get_day_of_month_week_expenses(False)
+    print(df_get_day_of_month_week_expenses.to_string())
+    
+    print("\n----- get_day_of_year_month_week_expenses() -----")
+    df_day_year_month_week = analysis.get_day_of_year_month_week_expenses(False)
+    print(df_day_year_month_week.to_string())
 
+    print("\n----- monthlySpending() -----")
+    df_monthly_spending = analysis.monthlySpending(False)
+    print(df_monthly_spending.to_string())
 
-# catMonth = test.category_by_month(False)
-# catMonth = test.category_by_year(False)
-# print(catMonth)
+    print("\n----- monthlySpending_withYear() -----")
+    df_monthly_spending_with_year = analysis.monthlySpending_withYear(False)
+    print(df_monthly_spending_with_year.to_string())
 
-# result = test.SpecificVendors_TotalSpent(False)
-result = test.SpecificVendors_TotalSpent_Monthly(False)
-# result = test.SpecificVendors_TotalSpent_Yearly(False)
-print(result.to_string())
-# bar
-# test.create_bar_charts(True)
-# test.create_bar_charts(False)
+    print("\n----- category_by_month() -----")
+    df_category_by_month = analysis.category_by_month(False)
+    print(df_category_by_month.to_string())
 
-# table
-# test.create_tables(True)
-# test.create_tables(False)
-# for index, row in test.iterrows():
-#     print(row)
+    print("\n----- category_by_year() -----")
+    df_category_by_year = analysis.category_by_year(False)
+    print(df_category_by_year.to_string())
 
+    print("\n----- SpecificVendors_TotalSpent() -----")
+    df_specific_vendors_total_spent = analysis.SpecificVendors_TotalSpent(False)
+    print(df_specific_vendors_total_spent.to_string())
+
+    print("\n----- SpecificVendors_TotalSpent_Monthly() -----")
+    df_specific_vendors_total_spent_monthly = analysis.SpecificVendors_TotalSpent_Monthly(False)
+    print(df_specific_vendors_total_spent_monthly.to_string())
+
+    print("\n----- SpecificVendors_TotalSpent_Yearly() -----")
+    df_specific_vendors_total_spent_yearly = analysis.SpecificVendors_TotalSpent_Yearly(False)
+    print(df_specific_vendors_total_spent_yearly.to_string())
+
+    print("\n----- spending_trends_over_time() -----")
+    df_overtime_daily = analysis.spending_trends_over_time(False, "D")
+    df_overtime_monthly = analysis.spending_trends_over_time(False, "M")
+    df_overtime_yearly = analysis.spending_trends_over_time(False, "Y")
+    print(df_overtime_daily.to_string())
+    print(df_overtime_monthly.to_string())
+    print(df_overtime_yearly.to_string())
+
+    print("\n----- average_transaction_by_category() -----")
+    df_avg_transaction = analysis.average_transaction_by_category(False)
+    print(df_avg_transaction.to_string())
+
+    print("\n----- median_transaction_by_category() -----")
+    df_median_transaction = analysis.median_transaction_by_category(False)
+    print(df_median_transaction.to_string())
+
+    print("\n----- transaction_count_by_vendor_over_time() -----")
+    df_transaction_count_vendor = analysis.transaction_count_by_vendor_over_time(False, "M")
+    print(df_transaction_count_vendor.to_string())
+
+    print("\n----- category_spending_proportions() -----")
+    df_category_proportions = analysis.category_spending_proportions(False)
+    print(df_category_proportions.to_string())
+
+    print("\n----- year_over_year_category_comparison() -----")
+    df_yoy_comparison = analysis.year_over_year_category_comparison(False)
+    print(df_yoy_comparison.to_string())
+
+    print("\n----- top_n_vendors() -----")
+    df_top_vendors = analysis.top_n_vendors(n=10, withEdu=False)
+    print(df_top_vendors.to_string())
+
+    print("\n----- monthly_average_spending_per_category() -----")
+    df_monthly_avg_spending = analysis.monthly_average_spending_per_category(False)
+    print(df_monthly_avg_spending.to_string())
+
+    # Close the database connection
+    conn.close()
+
+if __name__ == "__main__":
+    main()
