@@ -49,9 +49,9 @@ class dataAnalysis():
         - withEdu=False: Exclude education expenses.
         """
         if withEdu:
-            return self.df
+            return self.df.copy()
         else:
-            return self.df[self.df['Category'] != 'Education']
+            return self.df[self.df['Category'] != 'Education'].copy()
 
     def get_category_expenses(self, withEdu=True):
         """
