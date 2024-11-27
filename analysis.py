@@ -236,10 +236,12 @@ class dataAnalysis():
         Lists total spending by specific vendors, sorted by amount (highest first).
         """
         df = self.get_data(withEdu)
+        # print(df.to_string())
+        print(df[df['Matches'] == ''].to_string())
         result = df.groupby("Matches")['Amount'].sum()
         result = result.sort_values(ascending=False)
         
-        print(result.to_string())  # Display results
+        # print(result.to_string())  # Display results
         return result
 
     def SpecificVendors_TotalSpent_Monthly(self, withEdu=True):

@@ -25,8 +25,8 @@ def main():
 
     # Call each function and print outputs
 
-    print("----- DataFrame -----")
-    analysis.print()  # This already prints the DataFrame
+    # print("----- DataFrame -----")
+    # analysis.print()  
 
     print("\n----- get_data() -----")
     df_data = analysis.get_data()
@@ -82,8 +82,8 @@ def main():
 
     print("\n----- spending_trends_over_time() -----")
     df_overtime_daily = analysis.spending_trends_over_time(False, "D")
-    df_overtime_monthly = analysis.spending_trends_over_time(False, "M")
-    df_overtime_yearly = analysis.spending_trends_over_time(False, "Y")
+    df_overtime_monthly = analysis.spending_trends_over_time(False, "ME")
+    df_overtime_yearly = analysis.spending_trends_over_time(False, "YE")
     print(df_overtime_daily.to_string())
     print(df_overtime_monthly.to_string())
     print(df_overtime_yearly.to_string())
