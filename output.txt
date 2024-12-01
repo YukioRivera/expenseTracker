@@ -2915,8 +2915,8 @@ HBO MAX                         35.94
 KWIK SERV                       35.39
 BOARDWALK FOOD CARTS            35.28
 MEGAPLEX                        35.22
-CRUZ CAR WASH                   35.00
 THE GAME FORT                   35.00
+CRUZ CAR WASH                   35.00
 OMOGARI                         34.91
 FENG CHA                        34.83
 DUTCHMANS                       34.17
@@ -2955,8 +2955,8 @@ ALLIANZ TRAVEL                  21.00
 MS AKIHABARA                    20.95
 JALAPENOS TAQUERIA              20.43
 SAN PEDRO MARKET                19.91
-THE BAGELRY                     19.90
 SWITCHPOINT CRC                 19.90
+THE BAGELRY                     19.90
 CAFE ROXA APOTHECARY            19.64
 ISLAND GRINDS                   19.32
 HARAJUKUFUROMU                  19.16
@@ -3023,11 +3023,11 @@ CRAFTYINTEN                      6.00
 BARNES AMP NOBLE                 5.92
 EVACARUSU                        5.73
 GOFUNDME                         5.68
-PAWS THRIFT STORE                5.25
 DT PAY BY SPACE                  5.25
+PAWS THRIFT STORE                5.25
 WESTIN KIERLAND DINING           5.16
-DRAIGUNA                         5.00
 TUACAHN CONCESSIONS              5.00
+DRAIGUNA                         5.00
 CC SLAUGHTERS PUERTO VALL        4.98
 FRESH ATTRACTIONS                4.65
 A FRESH ATTRC                    4.32
@@ -4336,22 +4336,22 @@ Year  Matches
       CA HUNTFISH                     96.94
       OOKINIZAIDAN                    93.29
       SPEEDWAY                        92.08
-      ROCKY VISTA HEALTH CENTER       90.00
       MENCHIES                        90.00
+      ROCKY VISTA HEALTH CENTER       90.00
 2024  DUBS BBQ                        89.58
 2023  STARBUCKS                       88.31
       DENGAMA                         87.87
 2022  BEST BUY                        87.49
-2023  CALIFORNIAS CALIF               84.65
-      UT MEDICAL                      84.65
+2023  UT MEDICAL                      84.65
+      CALIFORNIAS CALIF               84.65
       CARLS JR                        84.34
 2024  RESIDENCES SKY BAR              83.91
       CARLS JR                        83.90
       TACO BELL                       82.98
       EXXON                           81.67
 2023  KFC                             80.71
-      TOKYO TOWER TOP DECK            80.08
       VIVA LAS AREPAS                 80.08
+      TOKYO TOWER TOP DECK            80.08
 2024  CHATGPT SUBSCRIPTION            80.00
       JOY PARK FLY                    79.20
 2023  AIRPORTPARKING                  77.64
@@ -4401,9 +4401,9 @@ Year  Matches
 2022  PETSMART                        51.87
 2023  FFNHELP                         50.31
 2024  AWSOM                           50.14
+      PY PCRF                         50.00
 2023  DOMINOS                         50.00
-2024  PY PCRF                         50.00
-      SP PREMIER YARNSCOM             49.90
+2024  SP PREMIER YARNSCOM             49.90
       SHELL OIL                       49.43
       SAV ON GASOLINE INC             49.22
 2023  POKEMON CENTER KYOTO            48.07
@@ -4433,10 +4433,10 @@ Year  Matches
 2023  WENDYS                          40.93
       BARSTOW FUELS                   40.80
       VONS                            40.01
-2024  ALASKA AIR                      40.00
+2024  TICKETS                         40.00
 2023  MOBETTAHS                       40.00
-2024  PHRSOUTHERNUTAHEARNOSEAMPT      40.00
-      TICKETS                         40.00
+2024  ALASKA AIR                      40.00
+      PHRSOUTHERNUTAHEARNOSEAMPT      40.00
       GOOGLE STORAGE                  39.98
       USPS                            39.89
       MOBETTAHS                       38.10
@@ -4447,9 +4447,9 @@ Year  Matches
 2023  FOREIGN TRANSACTION FEE         36.06
       KWIK SERV                       35.39
 2024  MEGAPLEX                        35.22
+      THE GAME FORT                   35.00
 2022  CRUZ CAR WASH                   35.00
       THE LOCAL SHOPPE                35.00
-2024  THE GAME FORT                   35.00
 2023  OMOGARI                         34.91
       THE LOCAL SHOPPE                34.74
 2024  PIZZA MY HEART                  34.53
@@ -4467,8 +4467,8 @@ Year  Matches
 2024  FEELLOVE COFFEE                 32.66
 2023  FANTASY OF LIGHTS               32.49
 2022  BURGER KING                     32.43
-2024  PERFORMANCE FITNESS             32.01
-      DICKS SPORTING GOODS            32.01
+2024  DICKS SPORTING GOODS            32.01
+      PERFORMANCE FITNESS             32.01
 2023  HBO MAX                         31.96
 2024  WESTSIDE HARDWARE               31.82
       COMMONS EAST CAFE               31.77
@@ -4492,9 +4492,9 @@ Year  Matches
       RIVER ROCK ROASTING             25.98
 2024  ASIAN MARKET ST GEORGE          25.80
 2022  ARCO                            25.23
-      PAYRANGE MOBILE                 25.00
 2024  PANOCHE FOOD MART               25.00
 2023  DIGNITY HE                      25.00
+2022  PAYRANGE MOBILE                 25.00
 2024  STARBUCKS                       24.82
 2023  WHOLEFDS SCA                    24.59
       APPLECOMBILL                    24.54
@@ -4517,8 +4517,8 @@ Year  Matches
       MS AKIHABARA                    20.95
       FENG CHA                        20.45
 2024  SAN PEDRO MARKET                19.91
+      THE BAGELRY                     19.90
 2022  SPEEDWAY                        19.90
-2024  THE BAGELRY                     19.90
 2023  CAFE ROXA APOTHECARY            19.64
 2022  REDEMPTION CREDIT               19.51
 2024  PANDARESTAU                     19.40
@@ -4567,16 +4567,16 @@ Year  Matches
 2024  MARKET MEX VTA                  12.85
       PERKS COFFEE                    12.83
 2023  SHINSEKAIKUSIKATSUITTOKU        12.80
-      GEJURAKU AMEYOKO                12.58
       SNOW BOBA                       12.58
+      GEJURAKU AMEYOKO                12.58
       THE COFFEE CUP                  12.56
       ALFY                            12.50
       JALAPENOS TAQUERIA              12.24
 2022  EB WERE HERE PREMIER            12.24
-      TEA VILLA                       12.00
-2024  ETSY INC                        12.00
 2023  FASTRAK VIOLATION               12.00
-      UESHIMAKO-HI-TENKUROMON         11.98
+2024  ETSY INC                        12.00
+2022  TEA VILLA                       12.00
+2023  UESHIMAKO-HI-TENKUROMON         11.98
 2024  MENCHIES DINOSA                 11.95
       SWITCHPOINT CRC                 11.90
 2023  NAKAU                           11.77
@@ -4595,8 +4595,8 @@ Year  Matches
 2024  TCGPLAYER                       10.15
       GULF OIL                        10.02
       AMAMEMBERSHIP DUES              10.00
-      DUTCH BROS                      10.00
 2023  LEMONADE ICE CREAM              10.00
+2024  DUTCH BROS                      10.00
 2022  SPOTIFY USA                      9.99
 2023  DAILY BAGEL CAFE                 9.91
 2022  PIPE LINE                        9.83
@@ -4622,8 +4622,8 @@ Year  Matches
       VENDING                          7.58
 2023  BATHBODYWORKS                    7.41
       MKTAXI                           7.36
-      DAILY YAMAZAKI                   7.24
       CONOCO-PWI                       7.24
+      DAILY YAMAZAKI                   7.24
 2024  BOARDWALK FOOD CARTS             7.09
       FASTRAK VIOLATION                7.00
       LITTLEXHUMA                      6.99
@@ -4636,8 +4636,8 @@ Year  Matches
       USPS                             6.10
       CRAFTYINTEN                      6.00
 2024  VIVA LAS AREPAS                  5.96
-2022  RIOT                             5.93
 2023  NOODLE AMP DUMPLING              5.93
+2022  RIOT                             5.93
 2024  BARNES AMP NOBLE                 5.92
 2022  TACO BELL                        5.86
 2023  EVACARUSU                        5.73
@@ -4648,11 +4648,11 @@ Year  Matches
       WESTIN KIERLAND DINING           5.16
 2023  DRAIGUNA                         5.00
 2024  LEMONADE ICE CREAM               5.00
+      TUACAHN CONCESSIONS              5.00
 2022  POP DRINKS                       5.00
-2024  TUACAHN CONCESSIONS              5.00
-2022  JTITWITCHTV SUB SRVCS            4.99
 2024  RIOT                             4.99
 2022  APPLEBILL                        4.99
+      JTITWITCHTV SUB SRVCS            4.99
 2024  CC SLAUGHTERS PUERTO VALL        4.98
       FRESH ATTRACTIONS                4.65
       A FRESH ATTRC                    4.32
