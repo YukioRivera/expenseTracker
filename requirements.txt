@@ -7,3 +7,7 @@ rapidfuzz
 nltk
 spacy
 thefuzz
+jupyter
+ipykernel
+sqlalchemy
+psycopg2-binary
